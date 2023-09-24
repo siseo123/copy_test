@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_item1"
+        android:title="항목 1"
+        android:icon="@drawable/he2"/>
+    <item
+        android:id="@+id/nav_item2"
+        android:title="항목 2"
+        android:icon="@drawable/ic_action_name"/>
+    <item
+        android:id="@+id/nav_item3"
+        android:title="항목 3"
+        android:icon="?attr/actionModePasteDrawable"/>
+    <item
+        android:id="@+id/nav_item4"
+        android:title="항목 4"
+        android:icon="@drawable/asian_food"/>
+    <!-- 더 많은 아이템 -->
+</menu>

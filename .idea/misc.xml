@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/2017218057/whateat_cap_V1.1.2.2/app/src/main/res/layout/activity_add_food_main.xml" value="1.16625" />
+        <entry key="..\:/2017218057/whateat_cap_V1.1.2.2/app/src/main/res/layout/activity_allselect_menu.xml" value="0.64" />
+        <entry key="..\:/2017218057/whateat_cap_V1.1.2.2/app/src/main/res/layout/activity_choice_menu_main.xml" value="0.64" />
+        <entry key="..\:/2017218057/whateat_cap_V1.1.2.2/app/src/main/res/layout/activity_main.xml" value="0.6425" />
+        <entry key="..\:/2017218057/whateat_cap_V1.1.2.2/app/src/main/res/layout/activity_roulette_main.xml" value="0.54375" />
+        <entry key="..\:/2017218057/whateat_cap_V1.1.2.2/app/src/main/res/layout/activity_show_restaurant_location.xml" value="1.16625" />
+        <entry key="..\:/2017218057/whateat_cap_V1.1.2.2/app/src/main/res/layout/activity_splash.xml" value="0.6425" />
+        <entry key="..\:/2017218057/whateat_cap_V1.1.2.2/app/src/main/res/layout/nav_header_layout.xml" value="0.54375" />
+        <entry key="..\:/2017218057/whateat_cap_V1.1.2.2/app/src/main/res/menu/navigation_menu.xml" value="1.16375" />
+        <entry key="..\:/Users/270pp/.android/cpastone/whateat_cap_V1.1.2,1/app/src/main/res/layout/activity_add_food_main.xml" value="1.16625" />
+        <entry key="..\:/Users/270pp/.android/cpastone/whateat_cap_V1.1.2,1/app/src/main/res/layout/activity_allselect_menu.xml" value="1.16625" />
+        <entry key="..\:/Users/270pp/.android/cpastone/whateat_cap_V1.1.2,1/app/src/main/res/layout/activity_choice_menu_main.xml" value="1.16625" />
+        <entry key="..\:/Users/270pp/.android/cpastone/whateat_cap_V1.1.2,1/app/src/main/res/layout/activity_main.xml" value="1.16625" />
+        <entry key="..\:/Users/270pp/.android/cpastone/whateat_cap_V1.1.2,1/app/src/main/res/layout/activity_show_restaurant_kakao_map.xml" value="0.8210922787193974" />
+        <entry key="..\:/Users/270pp/.android/cpastone/whateat_cap_V1.1.2,1/app/src/main/res/layout/activity_show_restaurant_location.xml" value="1.16625" />
+        <entry key="..\:/Users/270pp/.android/cpastone/whateat_cap_V1.1.2,1/app/src/main/res/layout/activity_splash.xml" value="1.16625" />
+        <entry key="..\:/Users/270pp/.android/cpastone/whateat_cap_V1.1.2,1/app/src/main/res/layout/dialog02.xml" value="1.2025" />
+        <entry key="..\:/Users/270pp/.android/cpastone/whateat_cap_V1.1.2.2/app/src/main/res/layout/activity_allselect_menu.xml" value="0.9464285714285714" />
+        <entry key="..\:/Users/270pp/.android/cpastone/whateat_cap_V1.1.2.2/app/src/main/res/layout/activity_choice_menu_main.xml" value="1.16625" />
+        <entry key="..\:/Users/270pp/.android/cpastone/whateat_cap_V1.1.2.2/app/src/main/res/layout/activity_main.xml" value="1.16625" />
+        <entry key="..\:/Users/270pp/.android/cpastone/whateat_cap_V1.1.2.2/app/src/main/res/layout/activity_show_restaurant_location.xml" value="1.16625" />
+        <entry key="..\:/Users/270pp/.android/cpastone/whateat_cap_V1.1.2/app/src/main/res/layout/activity_roulette_main.xml" value="0.6716269841269841" />
+        <entry key="..\:/Users/270pp/.android/cpastone/whateat_cap_V1.1.2/app/src/main/res/layout/activity_show_restaurant_location.xml" value="0.6716269841269841" />
+        <entry key="..\:/Users/270pp/.android/cpastone/whateat_cap_V1.1.2/app/src/main/res/layout/activity_splash.xml" value="0.6716269841269841" />
+        <entry key="..\:/Users/270pp/.android/cpastone/whateat_cap_V1.1.2/app/src/main/res/layout/dialog01.xml" value="0.51875" />
+        <entry key="..\:/Users/270pp/.android/cpastone/whateat_cap_V1.1.2/app/src/main/res/layout/dialog02.xml" value="0.51875" />
+        <entry key="..\:/Users/270pp/AndroidStudioProjects/whateat_CV3/app/src/main/res/layout/activity_choice_menu_main.xml" value="0.701195219123506" />
+        <entry key="..\:/Users/270pp/AndroidStudioProjects/whateat_CV3/app/src/main/res/layout/activity_main.xml" value="0.6359126984126984" />
+        <entry key="..\:/Users/270pp/AndroidStudioProjects/whateat_CV3/app/src/main/res/layout/activity_roulette_main.xml" value="0.50875" />
+        <entry key="..\:/Users/270pp/AndroidStudioProjects/whateat_CV3/app/src/main/res/layout/activity_test_active.xml" value="1.0466269841269842" />
+        <entry key="..\:/Users/270pp/AndroidStudioProjects/whateat_CV8_M2/app/src/main/res/drawable/gotoroulette.xml" value="0.2775" />
+        <entry key="..\:/Users/270pp/AndroidStudioProjects/whateat_CV8_M2/app/src/main/res/font/font.xml" value="1.25875" />
+        <entry key="..\:/Users/270pp/AndroidStudioProjects/whateat_CV8_M2/app/src/main/res/layout/activity_add_food_main.xml" value="0.8506151142355008" />
+        <entry key="..\:/Users/270pp/AndroidStudioProjects/whateat_CV8_M2/app/src/main/res/layout/activity_allselect_menu.xml" value="0.8506151142355008" />
+        <entry key="..\:/Users/270pp/AndroidStudioProjects/whateat_CV8_M2/app/src/main/res/layout/activity_choice_menu_main.xml" value="0.8506151142355008" />
+        <entry key="..\:/Users/270pp/AndroidStudioProjects/whateat_CV8_M2/app/src/main/res/layout/activity_main.xml" value="0.7013888888888888" />
+        <entry key="..\:/Users/270pp/AndroidStudioProjects/whateat_CV8_M2/app/src/main/res/layout/activity_roulette_main.xml" value="1.18625" />
+        <entry key="..\:/Users/270pp/AndroidStudioProjects/whateat_CV8_M2/app/src/main/res/layout/activity_show_restaurant_kakao_map.xml" value="1.18625" />
+        <entry key="..\:/Users/270pp/AndroidStudioProjects/whateat_CV8_M2/app/src/main/res/layout/activity_show_restaurant_location.xml" value="1.18625" />
+        <entry key="..\:/Users/270pp/AndroidStudioProjects/whateat_CV8_M2/app/src/main/res/layout/activity_splash.xml" value="0.72875" />
+        <entry key="..\:/Users/270pp/AndroidStudioProjects/whateat_cap_V1.1.2.3.1/whateat_cap_V1.1.2.3.1/app/src/main/res/layout/activity_add_food_main.xml" value="0.6425" />
+        <entry key="..\:/Users/270pp/AndroidStudioProjects/whateat_cap_V1.1.2.3.1/whateat_cap_V1.1.2.3.1/app/src/main/res/layout/activity_main.xml" value="0.6425" />
+        <entry key="..\:/Users/270pp/AndroidStudioProjects/whateat_cap_V1.1.2.3.1/whateat_cap_V1.1.2.3.1/app/src/main/res/layout/activity_show_info_restaurant.xml" value="0.645" />
+        <entry key="..\:/Users/270pp/AndroidStudioProjects/whateat_cap_V1.1.2.3.1/whateat_cap_V1.1.2.3.1/app/src/main/res/layout/activity_show_restaurant_kakao_map.xml" value="0.645" />
+        <entry key="..\:/Users/270pp/AndroidStudioProjects/whateat_cap_V1.1.2.3.1/whateat_cap_V1.1.2.3.1/app/src/main/res/layout/activity_show_restaurant_location.xml" value="0.645" />
+        <entry key="..\:/Users/270pp/AndroidStudioProjects/whateat_cap_V1.1.2.3.1/whateat_cap_V1.1.2.3.1/app/src/main/res/layout/activity_splash.xml" value="0.645" />
+        <entry key="..\:/Users/270pp/Downloads/whateat_CV8_Final/whateat_CV8_Final/app/src/main/res/layout/activity_add_food_main.xml" value="1.2025" />
+        <entry key="..\:/Users/270pp/Downloads/whateat_CV8_Final/whateat_CV8_Final/app/src/main/res/layout/activity_allselect_menu.xml" value="1.2025" />
+        <entry key="..\:/Users/270pp/Downloads/whateat_CV8_Final/whateat_CV8_Final/app/src/main/res/layout/activity_choice_menu_main.xml" value="1.2025" />
+        <entry key="..\:/Users/270pp/Downloads/whateat_CV8_Final/whateat_CV8_Final/app/src/main/res/layout/activity_main.xml" value="0.8128249566724437" />
+        <entry key="..\:/Users/270pp/Downloads/whateat_CV8_Final/whateat_CV8_Final/app/src/main/res/layout/activity_roulette_main.xml" value="0.8128249566724437" />
+        <entry key="..\:/Users/270pp/Downloads/whateat_CV8_Final/whateat_CV8_Final/app/src/main/res/layout/activity_show_restaurant_kakao_map.xml" value="1.2025" />
+        <entry key="..\:/Users/270pp/Downloads/whateat_CV8_Final/whateat_CV8_Final/app/src/main/res/layout/activity_show_restaurant_location.xml" value="1.2025" />
+        <entry key="..\:/Users/270pp/Downloads/whateat_CV8_Final/whateat_CV8_Final/app/src/main/res/layout/activity_splash.xml" value="1.2025" />
+        <entry key="..\:/Users/270pp/Downloads/whateat_CV8_Final/whateat_CV8_Final/app/src/main/res/layout/dialog01.xml" value="1.2025" />
+        <entry key="..\:/Users/qwera/AndroidStudioProjects/whateat_CV3/app/src/main/res/layout/activity_main.xml" value="0.79875" />
+        <entry key="..\:/Users/rlawh/AndroidStudioProjects/whateat/app/src/main/res/drawable/shadow.xml" value="0.2165" />
+        <entry key="..\:/Users/rlawh/AndroidStudioProjects/whateat/app/src/main/res/layout/activity_main.xml" value="0.25" />
+        <entry key="..\:/whateat_CV3/app/src/main/res/layout/activity_choice_menu_main.xml" value="0.3507025761124122" />
+        <entry key="..\:/whateat_CV3/app/src/main/res/layout/activity_main.xml" value="0.75" />
+        <entry key="..\:/whateat_CV4/app/src/main/res/drawable-v24/show_list_btn.xml" value="0.4" />
+        <entry key="..\:/whateat_CV4/app/src/main/res/drawable/ic_launcher_background.xml" value="0.4" />
+        <entry key="..\:/whateat_CV4/app/src/main/res/drawable/shadow2.xml" value="0.4" />
+        <entry key="..\:/whateat_CV4/app/src/main/res/font/bmjua_ttf.xml" value="0.57875" />
+        <entry key="..\:/whateat_CV4/app/src/main/res/layout/activity_add_food_main.xml" value="0.51" />
+        <entry key="..\:/whateat_CV4/app/src/main/res/layout/activity_allselect_menu.xml" value="0.6210045662100456" />
+        <entry key="..\:/whateat_CV4/app/src/main/res/layout/activity_choice_menu_main.xml" value="0.6210045662100456" />
+        <entry key="..\:/whateat_CV4/app/src/main/res/layout/activity_main.xml" value="0.6210045662100456" />
+        <entry key="..\:/whateat_CV4/app/src/main/res/layout/activity_roulette_main.xml" value="0.9117063492063492" />
+        <entry key="..\:/whateat_CV4/app/src/main/res/layout/activity_test_active.xml" value="0.9117063492063492" />
+        <entry key="..\:/whateat_CV6/app/src/main/res/drawable/add_btn.xml" value="0.3105" />
+        <entry key="..\:/whateat_CV6/app/src/main/res/drawable/gotoroulette.xml" value="0.3105" />
+        <entry key="..\:/whateat_CV6/app/src/main/res/drawable/map_btn.xml" value="0.3105" />
+        <entry key="..\:/whateat_CV6/app/src/main/res/layout/activity_add_food_main.xml" value="1.31875" />
+        <entry key="..\:/whateat_CV6/app/src/main/res/layout/activity_allselect_menu.xml" value="1.31875" />
+        <entry key="..\:/whateat_CV6/app/src/main/res/layout/activity_choice_menu_main.xml" value="0.7375" />
+        <entry key="..\:/whateat_CV6/app/src/main/res/layout/activity_main.xml" value="0.7722513089005235" />
+        <entry key="..\:/whateat_CV6/app/src/main/res/layout/activity_roulette_main.xml" value="0.9675" />
+        <entry key="..\:/whateat_CV8/app/src/main/res/layout/activity_add_food_main.xml" value="0.51" />
+        <entry key="..\:/whateat_CV8/app/src/main/res/layout/activity_allselect_menu.xml" value="0.86125" />
+        <entry key="..\:/whateat_CV8/app/src/main/res/layout/activity_choice_menu_main.xml" value="0.86125" />
+        <entry key="..\:/whateat_CV8/app/src/main/res/layout/activity_main.xml" value="0.9" />
+        <entry key="..\:/whateat_CV8/app/src/main/res/layout/activity_roulette_main.xml" value="0.86125" />
+        <entry key="..\:/whateat_CV8_M2/app/src/main/res/drawable/ic_launcher_foreground.xml" value="0.2775" />
+        <entry key="..\:/whateat_CV8_M2/app/src/main/res/drawable/ok_btn.xml" value="0.2775" />
+        <entry key="..\:/whateat_CV8_M2/app/src/main/res/drawable/place_info_btn.xml" value="0.283" />
+        <entry key="..\:/whateat_CV8_M2/app/src/main/res/drawable/reset_btn.xml" value="0.2775" />
+        <entry key="..\:/whateat_CV8_M2/app/src/main/res/drawable/round_bg.xml" value="0.2775" />
+        <entry key="..\:/whateat_CV8_M2/app/src/main/res/font/font.xml" value="0.74125" />
+        <entry key="..\:/whateat_CV8_M2/app/src/main/res/layout/activity_add_food_main.xml" value="1.18625" />
+        <entry key="..\:/whateat_CV8_M2/app/src/main/res/layout/activity_allselect_menu.xml" value="0.655" />
+        <entry key="..\:/whateat_CV8_M2/app/src/main/res/layout/activity_choice_menu_main.xml" value="0.655" />
+        <entry key="..\:/whateat_CV8_M2/app/src/main/res/layout/activity_main.xml" value="0.9" />
+        <entry key="..\:/whateat_CV8_M2/app/src/main/res/layout/activity_roulette_main.xml" value="0.655" />
+        <entry key="..\:/whateat_CV8_M2/app/src/main/res/layout/activity_show_restaurant_kakao_map.xml" value="0.75" />
+        <entry key="..\:/whateat_CV8_M2/app/src/main/res/layout/activity_show_restaurant_location.xml" value="0.66875" />
+        <entry key="..\:/whateat_CV8_M2/app/src/main/res/layout/activity_splash.xml" value="0.66875" />
+        <entry key="..\:/whateat_CV8_M2/app/src/main/res/layout/dialog01.xml" value="1.18375" />
+        <entry key="..\:/whateat_CV8_M2/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.2775" />
+        <entry key="..\:/whateat_CV8_M2/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.2775" />
+        <entry key="..\:/whateat_cap_V1.1.2.2 JH-20230918T111324Z-001/whateat_cap_V1.1.2.2 JH/app/src/main/res/drawable/action_btn.xml" value="0.2715" />
+        <entry key="..\:/whateat_cap_V1.1.2.2 JH-20230918T111324Z-001/whateat_cap_V1.1.2.2 JH/app/src/main/res/layout/activity_calendar.xml" value="0.64" />
+        <entry key="..\:/whateat_cap_V1.1.2.2 JH-20230918T111324Z-001/whateat_cap_V1.1.2.2 JH/app/src/main/res/layout/activity_list_item.xml" value="0.64" />
+        <entry key="..\:/whateat_cap_V1.1.2.2 JH-20230918T111324Z-001/whateat_cap_V1.1.2.2 JH/app/src/main/res/layout/activity_show_info_restaurant.xml" value="0.64" />
+        <entry key="..\:/whateat_cap_V1.1.2.2 JH-20230918T111324Z-001/whateat_cap_V1.1.2.2 JH/app/src/main/res/layout/activity_show_restaurant_kakao_map.xml" value="0.64" />
+        <entry key="..\:/whateat_cap_V1.1.2.3.1/whateat_cap_V1.1.2.3.1/app/src/main/res/layout/activity_add_food_main.xml" value="0.64" />
+        <entry key="..\:/whateat_cap_V1.1.2.3.1/whateat_cap_V1.1.2.3.1/app/src/main/res/layout/activity_main.xml" value="0.64" />
+        <entry key="..\:/whateat_cap_V1.1.2.3/whateat_cap_V1.1.2.3/app/src/main/res/layout/activity_add_food_main.xml" value="1.16625" />
+        <entry key="..\:/whateat_cap_V1.1.2.3/whateat_cap_V1.1.2.3/app/src/main/res/layout/activity_allselect_menu.xml" value="1.16625" />
+        <entry key="..\:/whateat_cap_V1.1.2.3/whateat_cap_V1.1.2.3/app/src/main/res/layout/activity_calendar.xml" value="1.16625" />
+        <entry key="..\:/whateat_cap_V1.1.2.3/whateat_cap_V1.1.2.3/app/src/main/res/layout/activity_choice_menu_main.xml" value="1.16625" />
+        <entry key="..\:/whateat_cap_V1.1.2.3/whateat_cap_V1.1.2.3/app/src/main/res/layout/activity_list_item.xml" value="1.16625" />
+        <entry key="..\:/whateat_cap_V1.1.2.3/whateat_cap_V1.1.2.3/app/src/main/res/layout/activity_main.xml" value="1.16625" />
+        <entry key="..\:/whateat_cap_V1.1.2.3/whateat_cap_V1.1.2.3/app/src/main/res/layout/activity_roulette_main.xml" value="1.16625" />
+        <entry key="..\:/whateat_cap_V1.1.2.3/whateat_cap_V1.1.2.3/app/src/main/res/layout/activity_show_info_restaurant.xml" value="1.16625" />
+        <entry key="..\:/whateat_cap_V1.1.2.3/whateat_cap_V1.1.2.3/app/src/main/res/layout/activity_show_restaurant_kakao_map.xml" value="1.16625" />
+        <entry key="..\:/whateat_cap_V1.1.2.3/whateat_cap_V1.1.2.3/app/src/main/res/layout/activity_show_restaurant_location.xml" value="1.16625" />
+        <entry key="..\:/whateat_cap_V1.1.2.3/whateat_cap_V1.1.2.3/app/src/main/res/layout/activity_splash.xml" value="1.16625" />
+        <entry key="..\:/whateat_cap_V1.1.2.3/whateat_cap_V1.1.2.3/app/src/main/res/layout/dialog01.xml" value="1.16625" />
+        <entry key="..\:/whateat_cap_V1.1.2.3/whateat_cap_V1.1.2.3/app/src/main/res/layout/dialog02.xml" value="1.16625" />
+        <entry key="..\:/whateat_cap_V1.1.2.3/whateat_cap_V1.1.2.3/app/src/main/res/layout/memolist_type.xml" value="1.16625" />
+        <entry key="..\:/whateat_cap_V1.1.2.3/whateat_cap_V1.1.2.3/app/src/main/res/layout/nav_header_layout.xml" value="1.16625" />
+        <entry key="..\:/whateat_cap_V1.1.2.3/whateat_cap_V1.1.2.3/app/src/main/res/menu/navigation_menu.xml" value="1.16625" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+  <component name="VisualizationToolProject">
+    <option name="state">
+      <ProjectState>
+        <option name="scale" value="0.51" />
+      </ProjectState>
+    </option>
+  </component>
+</project>

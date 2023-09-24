@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">뭐먹지? v8</string>
+    <string name="myLocation">현 위치:</string>
+    <string name="food_country">체크한 음식들이 후보로 선택됩니다.</string>
+    <string name="loadingLocation">위치를 불러오는 중\.\.\.</string>
+    <string name="asiaF">아시안</string>
+    <string name="japanF">일식</string>
+    <string name="koreaF">한식</string>
+    <string name="westF">양식</string>
+    <string name="fastF">패스트푸드</string>
+    <string name="chinaF">중식</string>
+    <string name="title">타이틀</string>
+    <string name="he">그</string>
+    <string name="except">위쪽에서의 음식 말고도 제외할 것이 있나요?</string>
+    <string name="button">버튼</string>
+</resources>

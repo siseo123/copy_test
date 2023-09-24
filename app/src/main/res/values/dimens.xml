@@ -1,0 +1,8 @@
+<!-- res/values/dimens.xml -->
+
+<resources>
+    <!-- 다른 dimension 리소스들 -->
+
+    <!-- 네비게이션 헤더의 상단 및 하단 여백 설정 -->
+    <dimen name="nav_header_vertical_spacing">16dp</dimen>
+</resources>

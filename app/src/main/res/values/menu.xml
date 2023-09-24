@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--한식-->
+    <string-array name="koreaF">
+        <item>비빔밥</item>
+        <item>냉면</item>
+        <item>분식</item>
+        <item>전</item>
+        <item>죽</item>
+        <item>국수</item>
+        <item>갈비탕</item>
+        <item>삼겹살</item>
+        <item>삼계탕</item>
+        <item>보쌈</item>
+        <item>족발</item>
+        <item>찜닭</item>
+        <item>부대찌개</item>
+        <item>불고기</item>
+        <item>국밥</item>
+        <item>생선구이</item>
+        <item>감자탕</item>
+        <item>꽃게</item>
+        <item>제육볶음</item>
+        <item>육개장</item>
+    </string-array>
+
+    <!--중식-->
+    <string-array name="chinaF">
+        <item>중국집</item>
+        <item>마라</item>
+        <item>양꼬치</item>
+
+    </string-array>
+
+    <!--일식-->
+    <string-array name="japanF">
+        <item>회</item>
+        <item>초밥</item>
+        <item>덮밥</item>
+        <item>돈까스</item>
+        <item>라멘</item>
+        <item>소바</item>
+        <item>우동</item>
+        <item>카레</item>
+        <item>샤브샤브</item>
+
+    </string-array>
+
+    <!--양식-->
+    <string-array name="westF">
+        <item>파스타</item>
+        <item>스테이크</item>
+        <item>필라프</item>
+        <item>리조또</item>
+        <item>샐러드</item>
+        <item>샌드위치</item>
+        <item>토스트</item>
+
+    </string-array>
+<!--패스트푸드-->
+    <string-array name="fastF">
+        <item>치킨</item>
+        <item>피자</item>
+        <item>버거</item>
+    </string-array>
+    <!--아시아-->
+    <string-array name="asiaF">
+        <item>쌀국수</item>
+        <item>팟타이</item>
+        <item>나시고랭</item>
+
+    </string-array>
+</resources>
