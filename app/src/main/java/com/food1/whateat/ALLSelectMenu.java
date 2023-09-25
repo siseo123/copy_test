@@ -164,6 +164,7 @@ public class ALLSelectMenu extends AppCompatActivity {
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT
             ));
+            layout.setGravity(Gravity.CENTER_VERTICAL);
 
             // 음식 항목을 표시할 텍스트 뷰 생성
             TextView foodTextView = new TextView(this);

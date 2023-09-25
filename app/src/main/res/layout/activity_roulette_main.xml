@@ -73,7 +73,10 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:background="@drawable/action_btn"
-                android:onClick="on_Click_sub"/>
+                android:onClick="on_Click_sub"
+                android:visibility="invisible"
+        />
+
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

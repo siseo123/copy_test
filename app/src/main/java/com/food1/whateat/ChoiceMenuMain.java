@@ -26,7 +26,7 @@ public class ChoiceMenuMain extends AppCompatActivity implements CompoundButton.
     ListView listView;
 
     //TextView tv;
-    String result = "";
+   // String result = "";
 
 
     String[] qqqqq0;    //최종 전달될 배열
@@ -41,17 +41,17 @@ public class ChoiceMenuMain extends AppCompatActivity implements CompoundButton.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choice_menu_main);
         Intent it = getIntent();
-        String tag = it.getStringExtra("it_tag");
+        String tag = it.getStringExtra("it_tag");//해당 음식의 테그
 
 
-       myLoc2=it.getStringArrayExtra("arr");
+       myLoc2=it.getStringArrayExtra("arr");//체크된 배열 전달한거(체크 된거만)
 
 
         //Toast.makeText(this, "접근 ", Toast.LENGTH_LONG).show();
 
         int stringId;
         stringId = getResources().getIdentifier(tag,"array",getPackageName()); //메인의 public void on_Click(View v) 에서 전달받은 코드를 바ㄷ음
-        myLoc = getResources().getStringArray(stringId);//전달받은 코드에 따라 음식의 종류를 나누고 그에 해당하는 배열 생성
+        myLoc = getResources().getStringArray(stringId);//전달받은 코드에 따라 음식의 종류를 나누고 그에 해당하는 오리지널 배열 생성(다 있는거)
 
 
         qqqqq0 =new String[myLoc.length];
@@ -116,7 +116,7 @@ public class ChoiceMenuMain extends AppCompatActivity implements CompoundButton.
              {
                  qqqqq0[i]=qqqqq[i].getText().toString();//누르는시 바로 저장? 전달하는 객체
                 qqqqq[i].setChecked(true);
-                 result+=qqqqq[i].getText()+" ";//음식의 컨테이너가 생성시 선택목록에 그 음식의 이름을 추가
+                // result+=qqqqq[i].getText()+" ";//음식의 컨테이너가 생성시 선택목록에 그 음식의 이름을 추가
                 break;
              }
         }}
@@ -177,7 +177,7 @@ public class ChoiceMenuMain extends AppCompatActivity implements CompoundButton.
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
 {
 
-    String result2="";
+
 
         for(int a=0; a<qqqqq.length; a++)
 
@@ -199,10 +199,6 @@ public class ChoiceMenuMain extends AppCompatActivity implements CompoundButton.
 
 
 
-            result2 += qqqqq2[a].getText().toString();
-            if (qqqqq[a].isChecked())//체크된거만 추가
-
-                result2+=" ";
 
 
         }

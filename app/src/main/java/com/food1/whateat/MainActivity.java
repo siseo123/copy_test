@@ -134,9 +134,11 @@ public class MainActivity extends AppCompatActivity{
                 R.string.app_name
         );
 
+
+
+
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
-
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -752,6 +754,8 @@ public class MainActivity extends AppCompatActivity{
 
         }
     }
+    
+    
     void checkPermission(){
 
         //권한 확인 단계
@@ -991,7 +995,7 @@ public class MainActivity extends AppCompatActivity{
 
 
 
-        //안봐도됨
+        //안봐도됨 토스트 실행중엔 다른 토스트 안나오게
     private static Toast sToast;
     public static void showToast(Context context, String message) {
         if (sToast == null) {
