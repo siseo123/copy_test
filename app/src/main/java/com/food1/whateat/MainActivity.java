@@ -192,32 +192,6 @@ public class MainActivity extends AppCompatActivity{
 
 
 
-        // 71~75 권한부여 할지말지 설정
-        if (!checkLocationServicesStatus()) {
-            showDialogForLocationServiceSetting();
-        } else {
-            checkPermission();
-        }
-
-        // 78~81 TextView에 location을 대입하여 주소 나타내고 button에 reload_button을 대입해 클릭해서 위치 동기화
-        final TextView textview_address = (TextView) findViewById(R.id.location);
-
-        ImageButton ReloadButton = (ImageButton) findViewById(R.id.reload_button);
-        ReloadButton.setOnClickListener(new View.OnClickListener() {
-            //83~97 버튼 누를시 지오코딩으로 위도와 경도를 구해 address에 데이터 넘김.
-            @Override
-            public void onClick(View arg0) {
-
-                gpsTracker = new GpsTracker(MainActivity.this);
-
-                double latitude = gpsTracker.getLatitude();
-                double longitude = gpsTracker.getLongitude();
-
-                String address = getCurrentAddress(latitude, longitude);
-                textview_address.setText(address);
-
-            }
-        }); // 안봐도 되는애
     }
 
     public void on_Click(View v) //해당 하는 이미지를 클릭하면 작동되는 함수. 해당 하는 음식의 num을 받은 후 리퀘스트 코드에 num을 더해  ChoiceMenuMain 로전달
@@ -624,6 +598,10 @@ public class MainActivity extends AppCompatActivity{
                 send_data = data.getStringExtra("Finish");
                 Log.i("What", send_data);
             }
+
+           // if(send_data==null)
+           // Toast.makeText(MainActivity.this, data.getStringExtra("Finish"), Toast.LENGTH_LONG).show();
+
         }
 
 
@@ -805,6 +783,7 @@ public class MainActivity extends AppCompatActivity{
 
     }
 
+    /*
     public String getCurrentAddress( double latitude, double longitude) {
 
         //지오코더... GPS를 주소로 변환
@@ -867,7 +846,7 @@ public class MainActivity extends AppCompatActivity{
             }
         });
         builder.create().show();
-    }
+    }*/
 
 
 
@@ -913,6 +892,7 @@ public class MainActivity extends AppCompatActivity{
         rouletteIntent.putStringArrayListExtra("AllMenuList", allMenu1);
         startActivityForResult(rouletteIntent,10000);}
     }
+
 
 
     //음식 추가페이지로 이동하는 함수. 전에 추가한 음식이 있는 ADDF배열을 같이 보냄.(빼고 싶을수도 있으니깐)
@@ -970,10 +950,13 @@ public class MainActivity extends AppCompatActivity{
 
         }
         //데이터는 되지만 음식을 고르지 못했다면 못가게 막음
-        else if(send_data==null || "굶기".equals(send_data)||"".equals(send_data))
+        else if(send_data==null )
         {
+            //|| "굶기".equals(send_data)||"".equals(send_data)
             showToast(this, "음식을 제대로 고른후 눌러주세요");
-
+            /*
+             여기서 체크된 카테고리에 대한 값이 이동해야힘(1개 이상 0개일때 예외처리 필요 체크된 카테고리를 담는 배별을 만들어 전달하면 될듯?)
+             */
 
         }
 
