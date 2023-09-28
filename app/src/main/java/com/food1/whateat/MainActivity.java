@@ -25,6 +25,7 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
@@ -74,6 +75,7 @@ public class MainActivity extends AppCompatActivity{
     //따로 추가
     String send_data;
     Dialog dilaog01;
+    Dialog  question_to_goto_food_dilago;
 
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
@@ -113,6 +115,10 @@ public class MainActivity extends AppCompatActivity{
         dilaog01 = new Dialog(MainActivity.this);       // Dialog 초기화
         dilaog01.requestWindowFeature(Window.FEATURE_NO_TITLE); // 타이틀 제거
         dilaog01.setContentView(R.layout.dialog01);
+
+        question_to_goto_food_dilago = new Dialog(MainActivity.this);       // Dialog 초기화
+        question_to_goto_food_dilago.requestWindowFeature(Window.FEATURE_NO_TITLE); // 타이틀 제거
+        question_to_goto_food_dilago.setContentView(R.layout.dialog03);
 
 
 
@@ -596,9 +602,50 @@ public class MainActivity extends AppCompatActivity{
         {
 
             if(!(("미정".equals(data.getStringExtra("Finish"))))) {
+
                 Result.setText(data.getStringExtra("Finish") + "(으)로 결정!");
                 send_data = data.getStringExtra("Finish");
+
+
                 Log.i("What", send_data);
+
+
+                LayoutInflater inflater = getLayoutInflater();
+                View dialogView = inflater.inflate(R.layout.dialog03, null);
+
+                TextView goto_map_to_choice = dialogView.findViewById(R.id.goto_map_to_choice);
+                if (goto_map_to_choice != null) {
+                    goto_map_to_choice.setText("주변에 있는 '" + send_data + "' 가게를 확인하실래요?");
+                }
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setView(dialogView);
+                builder.setCancelable(true);
+
+                final AlertDialog question_to_goto_food_dilago = builder.create();
+
+                Button yesBtn = dialogView.findViewById(R.id.yesBtn);
+                yesBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        question_to_goto_food_dilago.dismiss();
+
+                        goto_map();
+                    }
+                });
+
+                Button noBtn = dialogView.findViewById(R.id.noBtn);
+                noBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        question_to_goto_food_dilago.dismiss();
+                    }
+                });
+
+                question_to_goto_food_dilago.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                question_to_goto_food_dilago.show();
+
+
             }
 
            // if(send_data==null)
@@ -945,6 +992,12 @@ public class MainActivity extends AppCompatActivity{
 
 
     //음식을 고르면 그 음식명을 들고 이동
+
+    public void goto_map() {
+        goto_map(null);
+    }
+
+
     public void goto_map(View v)
     {
         //데이터 없으면 못들어가게 막음
