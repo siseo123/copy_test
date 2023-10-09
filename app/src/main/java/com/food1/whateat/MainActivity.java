@@ -615,7 +615,7 @@ public class MainActivity extends AppCompatActivity{
 
                 TextView goto_map_to_choice = dialogView.findViewById(R.id.goto_map_to_choice);
                 if (goto_map_to_choice != null) {
-                    goto_map_to_choice.setText("주변에 있는 '" + send_data + "' 가게를 확인하실래요?");
+                    goto_map_to_choice.setText("주변에 있는 '" + send_data + "' 가게를\n 확인하실래요?");
                 }
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -1088,7 +1088,7 @@ public class MainActivity extends AppCompatActivity{
 
 
 
-    }
+}
 
 
 

@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -165,13 +166,14 @@ public class ALLSelectMenu extends AppCompatActivity {
                     ViewGroup.LayoutParams.WRAP_CONTENT
             ));
             layout.setGravity(Gravity.CENTER_VERTICAL);
+           // layout.setBackgroundColor(Color.parseColor("#FFA500"));
 
             // 음식 항목을 표시할 텍스트 뷰 생성
             TextView foodTextView = new TextView(this);
             foodTextView.setText(" "+s);
             foodTextView.setTextSize(45);
             foodTextView.setTextColor(ContextCompat.getColor(this, R.color.text_color)); //텍스트 컬러 수정(준형)
-
+           // foodTextView.setBackgroundColor(Color.parseColor("#FFD278"));
 
 
             foodTextView.setLayoutParams(new LinearLayout.LayoutParams(
@@ -189,11 +191,17 @@ public class ALLSelectMenu extends AppCompatActivity {
             // 삭제 버튼 생성
             Button deleteButton = new Button(this);
             deleteButton.setText("삭제");
-            deleteButton.setLayoutParams(new LinearLayout.LayoutParams(
 
+
+
+            // LinearLayout.LayoutParams를 생성하고 마진을 설정합니다.
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
                     ViewGroup.LayoutParams.WRAP_CONTENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT
-            ));
+            );
+            layoutParams.setMargins(0, 0, 40, 0); // 마진넣기
+
+            deleteButton.setLayoutParams(layoutParams);
             deleteButton.setGravity(Gravity.CENTER);
 
 

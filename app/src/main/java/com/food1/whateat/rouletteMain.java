@@ -127,7 +127,7 @@ public class rouletteMain extends AppCompatActivity {
                         public void onClick(View view) {
 
                             if(allMenu2.size()==1)
-                                showToast(rouletteMain.this,"음식이 없습니다.");
+                                showToast(rouletteMain.this,"더이상 지울수 없습니다.");
 
                             else if (allMenu2.contains(currentItem)) //아이템이 존재한다면
                             {

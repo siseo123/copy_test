@@ -44,7 +44,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="John Doe"
+        android:text="lmk"
         android:textColor="@color/text_color_gray"
         android:textSize="18sp"
         android:textStyle="bold" />
@@ -55,7 +55,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="johndoe@example.com"
+        android:text="lmk@example.com"
         android:textColor="@color/text_color_gray"
         android:textSize="30sp" />
         </LinearLayout>
