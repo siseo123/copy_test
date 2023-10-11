@@ -10,11 +10,11 @@ android {
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.food1.whateat"
+        applicationId "com.food1.whateat1"
         minSdk 22
         targetSdk 33
-        versionCode 2
-        versionName "1.1"
+        versionCode 4
+        versionName "1.4"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }

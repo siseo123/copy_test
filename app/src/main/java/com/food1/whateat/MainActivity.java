@@ -686,8 +686,6 @@ public class MainActivity extends AppCompatActivity{
                     else  //아니라면 전부 널로 채움
                     {
                         Arrays.fill(KF, null);
-
-
                     }
                     break;
 
@@ -1095,9 +1093,6 @@ public class MainActivity extends AppCompatActivity{
             }
         });
     }
-
-
-
 }
 
 
