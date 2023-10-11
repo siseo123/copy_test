@@ -72,8 +72,12 @@
             android:name=".show_info_restaurant"
             android:exported="false" />
 
+
         <activity
-            android:name=".renew.view.CalendarActivity"
+            android:name=".presentation.CalendarActivity"
+            android:exported="false" />
+        <activity
+            android:name=".presentation.FoodListActivity"
             android:exported="false" />
     </application>
     <queries>

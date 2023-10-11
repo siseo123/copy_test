@@ -2,6 +2,7 @@ package com.food1.whateat;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -46,6 +47,8 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class show_restaurant_kakaoMap extends AppCompatActivity implements MapView.MapViewEventListener, MapView.POIItemEventListener, MapView.CurrentLocationEventListener{
     //MapView mapView = new MapView(this);
@@ -69,7 +72,7 @@ public class show_restaurant_kakaoMap extends AppCompatActivity implements MapVi
     String api;
     int cnt = 0;
     MapPOIItem pMarker;
-    int final_cnt;
+    int final_cnt=0;
     final String PACKAGE_NAME = "net.daum.android.map";
     double lat;
     double lng;
@@ -78,6 +81,12 @@ public class show_restaurant_kakaoMap extends AppCompatActivity implements MapVi
     int listTouch=0;
     ListView plistView;
     ListViewAdapter customAdapter;
+
+    boolean selected;
+
+
+    int check_index=-1;
+    String[] food_list = new String[]{"한식","중식","일식","양식","패스트푸드","아시아음식"};
     //파싱 정보 저장 클래스
     public static class xpp_list {
         final int list_cnt = 9999;
@@ -87,7 +96,7 @@ public class show_restaurant_kakaoMap extends AppCompatActivity implements MapVi
         public String[] get_phone = new String[list_cnt];
         public String[] get_x = new String[list_cnt];
         public String[] get_y = new String[list_cnt];
-
+        public String[] get_foodType = new String[list_cnt];
         public String[] get_dis = new String[list_cnt];
     }
 
@@ -110,7 +119,8 @@ public class show_restaurant_kakaoMap extends AppCompatActivity implements MapVi
         task = new Task();
 
         Intent get_data = getIntent();
-        keyword = get_data.getStringExtra("selected_food");
+        keyword = get_data.getStringExtra("Finish");
+        selected = get_data.getBooleanExtra("selected",false);
         /**
          p_distance = findViewById(R.id.distance);
          p_name = findViewById(R.id.place_name);
@@ -138,17 +148,25 @@ public class show_restaurant_kakaoMap extends AppCompatActivity implements MapVi
         mapView.setMapCenterPoint(mapPoint,true);
         mapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeading);
 
+
         //Log.i("마커", String.valueOf(mapView.isShowingCurrentLocationMarker()));
-        try {
-            encodeUrl = URLEncoder.encode(keyword,"utf-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
+        if(selected==false){
+                keyword=food_list[0];
+                encoding_url();
+                task = new Task();
+        }
+        else{
+            keyword = get_data.getStringExtra("Finish");
+            encoding_url();
         }
         api = "https://dapi.kakao.com/v2/local/search/keyword.xml?page="+pages+"&size=15&sort=distance&category_group_code=FD6&x="+mx_pos+"&y="+my_pos+"&query=" + encodeUrl + "&radius=1000";
+        task.execute(api);
+
+
         //api = "https://dapi.kakao.com/v2/local/search/keyword.xml?page="+pages+"&size=15&sort=accuracy&category_group_code=FD6&query=" + encodeUrl;
 
         //파싱 기본구성
-        task.execute(api);
+
         Log.i("어댑터갯수", String.valueOf(plistView.getCount()));
 
 
@@ -168,11 +186,24 @@ public class show_restaurant_kakaoMap extends AppCompatActivity implements MapVi
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(view.getContext(),show_info_restaurant.class);
+                intent.putExtra("url",xppList.getp_url[position]);
+                intent.putExtra("mx_pos",mx_pos);
+                intent.putExtra("my_pos",my_pos);
+                intent.putExtra("lat",xppList.get_y[position]);
+                intent.putExtra("lng",xppList.get_x[position]);
                 startActivity(intent);
                 return true;
             }
         });
     }
+    public void encoding_url(){
+        try {
+            encodeUrl = URLEncoder.encode(keyword,"utf-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+    }
+
     private void getHashKey(){
         PackageInfo packageInfo = null;
         try {
@@ -193,6 +224,7 @@ public class show_restaurant_kakaoMap extends AppCompatActivity implements MapVi
             }
         }
     }
+
 
 
     public void startLocationService() {
@@ -345,7 +377,7 @@ public class show_restaurant_kakaoMap extends AppCompatActivity implements MapVi
         protected String doInBackground(String... urls) {
             try{
                 String txt = downloadUrl(urls[0]);
-                Log.i("txt: ",txt);
+                //Log.i("txt: ",txt);
                 return txt;
 
             } catch (IOException e){
@@ -371,9 +403,6 @@ public class show_restaurant_kakaoMap extends AppCompatActivity implements MapVi
                 xpp2.setInput(new StringReader(result));
                 int eventType = xpp.getEventType();
                 int eventType2 = xpp.getEventType();
-
-
-
                 String phone_num;
                 String address_name;
                 String x;
@@ -382,11 +411,12 @@ public class show_restaurant_kakaoMap extends AppCompatActivity implements MapVi
                 String place_name;
                 String place_url;
                 String distance;
+                String food_type;
                 while(eventType!=XmlPullParser.END_DOCUMENT){
                     if(eventType == XmlPullParser.START_TAG){
 
                         name = xpp.getName();
-                        Log.i("myname:",name);
+                        //Log.i("myname:",name);
 
                         switch (name) {
                             case "documents":
@@ -410,9 +440,13 @@ public class show_restaurant_kakaoMap extends AppCompatActivity implements MapVi
                                 xpp.next();
                                 place_url = xpp.getText();
                                 xppList.getp_url[cnt] = place_url;
-                                Log.i("인터넷",place_url);
+                                //Log.i("인터넷",place_url);
                                 break;
-
+                            case "category_name":
+                                xpp.next();
+                                food_type = xpp.getText();
+                                xppList.get_foodType[cnt] = food_type;
+                                break;
 
                             case "distance":
                                 xpp.next();
@@ -430,12 +464,10 @@ public class show_restaurant_kakaoMap extends AppCompatActivity implements MapVi
                                 y = xpp.getText();
                                 xppList.get_y[cnt++] = y;
                                 break;
-
-
                         }
-
                     }
                     eventType = xpp.next();
+
                 }
                 while(eventType2!=XmlPullParser.END_DOCUMENT) {
                     if (eventType2 == XmlPullParser.START_TAG) {
@@ -487,6 +519,8 @@ public class show_restaurant_kakaoMap extends AppCompatActivity implements MapVi
                 Toast.makeText(getApplicationContext(),"선택된 음식의 가게가 없어요.. ㅠㅠ\n처음 화면으로 돌아갈게요...",Toast.LENGTH_LONG).show();
                 kakaoMap.finish();
             }*/
+
+
             if(!convert_isEnd){
                 pages += 1;
                 task = new Task();
@@ -499,22 +533,62 @@ public class show_restaurant_kakaoMap extends AppCompatActivity implements MapVi
                 Log.i("에이피",api);//api pages수 정상 상승 주소 검출
 
             }else if(convert_isEnd){
-                for(int i = 0;i<cnt;i++) {
+                if(selected==false){
+                    if(check_index<food_list.length-1){
+                        check_index+=1;
+                        Log.i("횟수",String.valueOf(check_index));
+                        keyword=food_list[check_index];
+                        encoding_url();
+                        task = new Task();
+                        api = "https://dapi.kakao.com/v2/local/search/keyword.xml?page="+pages+"&size=15&sort=distance&category_group_code=FD6&x="+mx_pos+"&y="+my_pos+"&query=" + encodeUrl + "&radius=1000";
+                        task.execute(api);
+
+                    }
+                }
+                for(int i = final_cnt;i<cnt;i++) {
                     pMarker = new MapPOIItem();
                     double x = Double.parseDouble(xppList.get_x[i]);
                     double y = Double.parseDouble(xppList.get_y[i]);
                     pMarkerPoint = MapPoint.mapPointWithGeoCoord(y, x);
                     pMarker.setItemName(xppList.get_Name[i]);
                     pMarker.setTag(i);
+                    System.out.println(xppList.get_Name[i]);
                     pMarker.setMapPoint(pMarkerPoint);
-                    pMarker.setMarkerType(MapPOIItem.MarkerType.BluePin);
+                    if(selected==false){
+                        if(food_type(xppList.get_foodType[i]).equals("한식")||
+                                food_type(xppList.get_foodType[i]).equals("중식")||
+                                food_type(xppList.get_foodType[i]).equals("양식")||
+                                food_type(xppList.get_foodType[i]).equals("일식")||
+                                food_type(xppList.get_foodType[i]).equals("패스트푸드")||
+                                food_type(xppList.get_foodType[i]).equals("아시아음식")){
+                            pMarker.setMarkerType(MapPOIItem.MarkerType.CustomImage);
+                            if(food_type(xppList.get_foodType[i]).equals("한식")){
+                                pMarker.setCustomImageResourceId(R.drawable.korea_food_marker);
+                            }else if(food_type(xppList.get_foodType[i]).equals("중식")){
+                                pMarker.setCustomImageResourceId(R.drawable.china_food_marker);
+                            }else if(food_type(xppList.get_foodType[i]).equals("양식")){
+                                pMarker.setCustomImageResourceId(R.drawable.steak_food_marker);
+                            }else if(food_type(xppList.get_foodType[i]).equals("일식")){
+                                pMarker.setCustomImageResourceId(R.drawable.japan_food_marker);
+                            }else if(food_type(xppList.get_foodType[i]).equals("패스트푸드")){
+                                pMarker.setCustomImageResourceId(R.drawable.fast_food_marker);
+                            }else if(food_type(xppList.get_foodType[i]).equals("아시아음식")){
+                                pMarker.setCustomImageResourceId(R.drawable.asian_food_marker);
+                            }
+                            pMarker.setCustomImageAutoscale(false);
+                            pMarker.setCustomImageAnchor(0.5f,1.0f);
+                        }
+                    }
+                    else{
+                        pMarker.setMarkerType(MapPOIItem.MarkerType.BluePin);
+                    }
                     mapView.addPOIItem(pMarker);
-                    final_cnt = i;
                     customAdapter.addItem(xppList.get_Name[i],xppList.get_phone[i],xppList.get_dis[i]);
                     customAdapter.notifyDataSetChanged();
+                    final_cnt=cnt;
                 }
                 customAdapter.notifyDataSetChanged();
-                Log.i("몇개", String.valueOf(cnt));
+                Log.i("몇개", String.valueOf(final_cnt));
                 //파싱이 끝났을 때 마지막 마커로 이동 및 정보 출력
 
                 if(cnt > 0){
@@ -559,7 +633,7 @@ public class show_restaurant_kakaoMap extends AppCompatActivity implements MapVi
                         buffer.append(str);
                     }
                     string_data = buffer.toString();
-                    Log.i("receiveMsg : ", string_data);
+                    //Log.i("receiveMsg : ", string_data);
 
                     reader.close();
                     conn.disconnect();
@@ -574,6 +648,24 @@ public class show_restaurant_kakaoMap extends AppCompatActivity implements MapVi
         }
 
     }
+
+
+    public String food_type(String f){
+        String type = f;
+        System.out.println("타입: "+type);
+        String koreanFood = "";
+        Pattern pattern = Pattern.compile("음식점 > (\\S+)");
+        Matcher matcher = pattern.matcher(type);
+
+        if (matcher.find()) {
+            koreanFood = matcher.group(1);
+
+            //System.out.println(koreanFood);
+        }
+        return koreanFood;
+    }
+
+
 
     public void installedKakaoMap(View v)
     {

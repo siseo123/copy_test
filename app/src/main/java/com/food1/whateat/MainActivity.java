@@ -37,7 +37,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
-import com.food1.whateat.renew.view.CalendarActivity;
+import com.food1.whateat.presentation.CalendarActivity;
+import com.food1.whateat.presentation.FoodListActivity;
 import com.google.android.material.navigation.NavigationView;
 
 import java.io.IOException;
@@ -84,7 +85,7 @@ public class MainActivity extends AppCompatActivity{
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) { 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -164,7 +165,14 @@ public class MainActivity extends AppCompatActivity{
                         }, 250); //버벅여서 지연시간 추가
                         break;
                     case R.id.nav_item2:
-                        Toast.makeText(MainActivity.this, "2누름", Toast.LENGTH_LONG).show();
+                        drawerLayout.closeDrawer(GravityCompat.START);
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                Intent intent2 = new Intent(getApplicationContext(), FoodListActivity.class);
+                                startActivity(intent2);
+                            }
+                        }, 250); //버벅여서 지연시간 추가
                         break;
                     case R.id.nav_item3:
                         Toast.makeText(MainActivity.this, "3누름", Toast.LENGTH_LONG).show();
@@ -1000,26 +1008,28 @@ public class MainActivity extends AppCompatActivity{
 
     public void goto_map(View v)
     {
+
         //데이터 없으면 못들어가게 막음
         if(!(isConnected(this)))
         {
             showToast(this, "네트워크를 연결 해주세요");
 
         }
-        //데이터는 되지만 음식을 고르지 못했다면 못가게 막음
-        else if(send_data==null )
+        //데이터는 되지만 음식을 고르지 못했다면 못가게 막음 -->그냥 지도로 이동하게
+        //여기 수정 필요. 체크박스 켜져 있는 타입의 가게만 나오게끔.
+        else if(send_data==null || "굶기".equals(send_data)||"".equals(send_data))
         {
-            //|| "굶기".equals(send_data)||"".equals(send_data)
-            showToast(this, "음식을 제대로 고른후 눌러주세요");
-            /*
-             여기서 체크된 카테고리에 대한 값이 이동해야힘(1개 이상 0개일때 예외처리 필요 체크된 카테고리를 담는 배별을 만들어 전달하면 될듯?)
-             */
+            Intent intent = new Intent(this, show_restaurant_kakaoMap.class);
+            startActivity(intent);
+            //showToast(this, "음식을 제대로 고른후 눌러주세요");
+
 
         }
 
         else {
             Intent goMap = new Intent(this, show_restaurant_kakaoMap.class);
-            goMap.putExtra("selected_food", send_data);
+            goMap.putExtra("selected",true);
+            goMap.putExtra("Finish", send_data);
             startActivity(goMap);
         }
     }
