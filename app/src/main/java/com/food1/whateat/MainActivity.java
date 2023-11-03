@@ -83,12 +83,12 @@ public class MainActivity extends AppCompatActivity{
     private Toolbar toolbar;
 
 
-
+    boolean check_result = true;
     @Override
     protected void onCreate(Bundle savedInstanceState) { 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        checkPermission();
         KF=getResources().getStringArray(R.array.koreaF);
         CF=getResources().getStringArray(R.array.chinaF);
         JF=getResources().getStringArray(R.array.japanF);
@@ -782,7 +782,7 @@ public class MainActivity extends AppCompatActivity{
 
         if (PermRequestCode == PERMISSIONS_REQUEST_CODE && grandResults.length == REQUIRED_PERMISSIONS.length) {
             // 요청 코드 PERMISSIONS_REQUEST_CODE 권한이 정상적으로 부여되었는지 확인
-            boolean check_result = true;
+           // boolean check_result = true;
 
             for (int result : grandResults) {
                 if (result != PackageManager.PERMISSION_GRANTED) {
@@ -793,15 +793,15 @@ public class MainActivity extends AppCompatActivity{
 
             // 115~131 권한 설정(check_result의 값에 따라 선택)
             if (check_result) {
-                //거부가 아니라면 위치를 설정할 수 있음
-            } else {
-                // 만얀 권한이 거부가 된다면 2가지 경우로 설명해줌.
-                if (ActivityCompat.shouldShowRequestPermissionRationale(this, REQUIRED_PERMISSIONS[0])
-                        || ActivityCompat.shouldShowRequestPermissionRationale(this, REQUIRED_PERMISSIONS[1])) {
-                    Toast.makeText(MainActivity.this, "권한이 없습니다. 앱을 다시 실행하여 위치 접근 권한을 허용해주세요.", Toast.LENGTH_LONG).show();
-                    finish();
+                    //거부가 아니라면 위치를 설정할 수 있음
                 } else {
-                    Toast.makeText(MainActivity.this, "권한이 없습니다. 설정(앱 정보)에서 위치 접근 권한을 확인해주세요. ", Toast.LENGTH_LONG).show();
+                    // 만얀 권한이 거부가 된다면 2가지 경우로 설명해줌.
+                    if (ActivityCompat.shouldShowRequestPermissionRationale(this, REQUIRED_PERMISSIONS[0])
+                            || ActivityCompat.shouldShowRequestPermissionRationale(this, REQUIRED_PERMISSIONS[1])) {
+                        Toast.makeText(MainActivity.this, "위치 접근 권한이 없습니다.\n설정(앱 정보)에서 확인해주세요.", Toast.LENGTH_LONG).show();
+                       // finish();
+                    } else {
+                    Toast.makeText(MainActivity.this, "위치 접근 권한이 없습니다.\n설정(앱 정보)에서 확인해주세요.", Toast.LENGTH_LONG).show();
                 }
             }
 
@@ -1004,6 +1004,14 @@ public class MainActivity extends AppCompatActivity{
     }
 
 
+
+
+
+
+
+
+
+
     public void goto_map(View v)
     {
 
@@ -1013,6 +1021,15 @@ public class MainActivity extends AppCompatActivity{
             showToast(this, "네트워크를 연결 해주세요");
 
         }
+
+
+       else if (!check_result) {
+            // 만얀 권한이 거부가 된다면 2가지 경우로 설명해줌.
+
+                Toast.makeText(MainActivity.this, "위치 접근 권한이 없습니다.\n설정(앱 정보)에서 확인해주세요.", Toast.LENGTH_LONG).show();
+
+        }
+
         //데이터는 되지만 음식을 고르지 못했다면 못가게 막음 -->그냥 지도로 이동하게
         //여기 수정 필요. 체크박스 켜져 있는 타입의 가게만 나오게끔.
         else if(send_data==null || "굶기".equals(send_data)||"".equals(send_data))
@@ -1094,13 +1111,5 @@ public class MainActivity extends AppCompatActivity{
         });
     }
 }
-
-
-
-
-
-
-
-
 
 

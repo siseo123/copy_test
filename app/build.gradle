@@ -13,8 +13,8 @@ android {
         applicationId "com.food1.whateat1"
         minSdk 22
         targetSdk 33
-        versionCode 4
-        versionName "1.4"
+        versionCode 5
+        versionName "1.5"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -60,4 +60,7 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.10.0'
     implementation 'com.google.android.material:material:1.5.1'
     annotationProcessor 'androidx.room:room-compiler:2.5.2'
+
+
+    implementation 'androidx.recyclerview:recyclerview:1.2.1'
 }
