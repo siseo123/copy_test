@@ -5,6 +5,7 @@ public class ItemData {
     public String pPhoneNumber;
     public String distance;
 
+    public int progress;
 
     public String getPlaceName(){
         return pName;
@@ -26,5 +27,13 @@ public class ItemData {
 
     public void setDistance(String distance){
         this.distance = distance;
+    }
+
+    public int getProgress() {
+        return progress;
+    }
+
+    public void setProgress(int progress){
+        this.progress = progress;
     }
 }

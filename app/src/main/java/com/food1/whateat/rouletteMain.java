@@ -47,7 +47,7 @@ public class rouletteMain extends AppCompatActivity {
     ArrayList <String> allMenu2=new ArrayList<>();//모든 음식 배열
     private boolean isStopped = true;
     Dialog dilaog0;
-
+    ImageButton start;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +59,7 @@ public class rouletteMain extends AppCompatActivity {
         sm = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 
 
-        ImageButton start = findViewById(R.id.spin_btn);
+        start = findViewById(R.id.spin_btn);
         ImageButton Finish = findViewById(R.id.Ifinish);
         randomTextView = findViewById(R.id.select_food_text);
 
@@ -87,7 +87,7 @@ public class rouletteMain extends AppCompatActivity {
                 if (!isStopped) {
                     int randomIndex = new Random().nextInt(allMenu2.size());
                     String randomMenu = allMenu2.get(randomIndex);
-
+                    start.setBackgroundResource(R.drawable.action_btn);
                     // UI 갱신은 메인 스레드에서 수행되어야 함
                     runOnUiThread(new Runnable() {
                         @Override

@@ -31,7 +31,6 @@ public class ALLSelectMenu extends AppCompatActivity {
     TextView[] ADFT;
 
 
-
     String KF[];
     String CF[];
     String JF[];
@@ -238,6 +237,8 @@ public class ALLSelectMenu extends AppCompatActivity {
                     }
                 }
             });
+
+
 
             // 리니어 레이아웃에 음식 항목과 삭제 버튼 추가
             layout.addView(foodTextView);
