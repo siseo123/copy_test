@@ -6,10 +6,11 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".show_restaurant_kakaoMap">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1"
+        android:layout_weight="4"
         android:layout_margin="10dp"
         android:background="@drawable/radius">
         <RelativeLayout
@@ -20,12 +21,47 @@
             android:layout_margin="10dp">
         </RelativeLayout>
     </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
 
+        android:layout_weight="7">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_gravity="center"
+            android:padding="5dp">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="범위 설정:"
+                android:gravity="center"
+                android:textSize="20sp"
+                android:layout_weight="1"/>
+            <TextView
+                android:id="@+id/set_radius"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="1000m"
+                android:textSize="15sp"
+                android:gravity="center"
+                android:layout_weight="1"/>
+        </LinearLayout>
+        <com.google.android.material.slider.Slider
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:stepSize="100"
+            android:valueFrom="1000"
+            android:valueTo="2000"
+            android:id="@+id/slide_bar"/>
+    </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/radius"
-        android:layout_weight="1"
+        android:layout_weight="4"
         android:layout_margin="10dp">
         <ListView
             android:id="@+id/pList"

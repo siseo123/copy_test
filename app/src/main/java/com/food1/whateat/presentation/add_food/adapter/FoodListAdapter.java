@@ -1,4 +1,4 @@
-package com.food1.whateat.presentation;
+package com.food1.whateat.presentation.add_food.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -11,20 +11,20 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.food1.whateat.R;
-import com.food1.whateat.data.food.Food;
-import com.food1.whateat.db.FoodDAO;
+import com.food1.whateat.data.food.FoodDAO;
+import com.food1.whateat.data.food.FoodVO;
 
 import java.util.List;
 
 public class FoodListAdapter extends RecyclerView.Adapter<FoodListAdapter.ViewHolder> {
 
     private final Context context;
-    private final List<Food> foods;
+    private final List<FoodVO> foodVOS;
     private final FoodDAO foodDAO;
 
-    public FoodListAdapter(Context context, List<Food> foods, FoodDAO foodDAO) {
+    public FoodListAdapter(Context context, List<FoodVO> foodVOS, FoodDAO foodDAO) {
         this.context = context;
-        this.foods = foods;
+        this.foodVOS = foodVOS;
         this.foodDAO = foodDAO;
     }
 
@@ -32,26 +32,26 @@ public class FoodListAdapter extends RecyclerView.Adapter<FoodListAdapter.ViewHo
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.food_list_row, parent, false);
+                .inflate(R.layout.item_food_list_row, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Food food = foods.get(position);
-        holder.textView.setText(food.getName());
+        FoodVO foodVO = foodVOS.get(position);
+        holder.textView.setText(foodVO.getName());
 
         holder.btDelete.setOnClickListener(v -> {
-            foodDAO.delete(foods.get(holder.getAdapterPosition()));
-            foods.remove(holder.getAdapterPosition());
+            foodDAO.delete(foodVOS.get(holder.getAdapterPosition()));
+            foodVOS.remove(holder.getAdapterPosition());
             notifyItemRemoved(position);
-            notifyItemRangeChanged(position, foods.size());
+            notifyItemRangeChanged(position, foodVOS.size());
         });
     }
 
     @Override
     public int getItemCount() {
-        return foods.size();
+        return foodVOS.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

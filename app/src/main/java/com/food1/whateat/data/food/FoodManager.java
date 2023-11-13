@@ -5,20 +5,19 @@ import java.util.List;
 
 public class FoodManager {
 
-    public static final FoodManager INSTANCE = new FoodManager();
-    private final FoodRepository defaultFoodRepository = new FoodRepository();
-    private final FoodRepository foodRepository = new FoodRepository();
-    private List<Food> selectFoods = new ArrayList<>();
+    public static FoodManager INSTANCE;
+    private final DefaultFoodRepository defaultFoodRepository = new DefaultFoodRepository();
+    private List<FoodVO> selectFoodVOS = new ArrayList<>();
+    private FoodVO selectedFoodVO = null;
 
-    public FoodManager() {
-//        FoodRepository.addDefault(defaultFoodRepository);
-    }
-
-    public FoodRepository getDefaultFoodRepository() {
+    public DefaultFoodRepository getDefaultFoodRepository() {
         return defaultFoodRepository;
     }
 
-    public FoodRepository getFoodRepository() {
-        return foodRepository;
+    public static FoodManager getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new FoodManager();
+        }
+        return INSTANCE;
     }
 }

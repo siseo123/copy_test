@@ -1,8 +1,9 @@
 package com.food1.whateat;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.Application;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -12,21 +13,26 @@ import android.graphics.Color;
 import android.graphics.drawable.PaintDrawable;
 import android.location.Location;
 import android.location.LocationManager;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Base64;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+
+import com.google.android.material.slider.Slider;
 
 import net.daum.mf.map.api.MapPOIItem;
 import net.daum.mf.map.api.MapPoint;
@@ -47,6 +53,7 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -62,7 +69,6 @@ public class show_restaurant_kakaoMap extends AppCompatActivity implements MapVi
     double my_pos;//위도
     double mx_pos;//경도
     final String key = "93475733697d72692048d958ab1e28cc";
-    TextView selected_food;
     String keyword;
     MapPoint mapPoint;
     String is_end;
@@ -73,20 +79,28 @@ public class show_restaurant_kakaoMap extends AppCompatActivity implements MapVi
     int cnt = 0;
     MapPOIItem pMarker;
     int final_cnt=0;
-    final String PACKAGE_NAME = "net.daum.android.map";
     double lat;
     double lng;
-    String getUrl;
 
     int listTouch=0;
     ListView plistView;
     ListViewAdapter customAdapter;
 
-    boolean selected;
+    boolean selected = true;
 
+    boolean isTouch = false;
+    int check_index=0;
 
-    int check_index=-1;
-    String[] food_list = new String[]{"한식","중식","일식","양식","패스트푸드","아시아음식"};
+    int radius = 1000;
+    ArrayList<String> food_list = new ArrayList<>();
+
+    Slider slider;
+
+    TextView text_radius;
+
+    Boolean convert_isEnd = false;
+
+    ProgressDialog dialog;
     //파싱 정보 저장 클래스
     public static class xpp_list {
         final int list_cnt = 9999;
@@ -103,6 +117,7 @@ public class show_restaurant_kakaoMap extends AppCompatActivity implements MapVi
     xpp_list xppList = new xpp_list();
 
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -110,17 +125,57 @@ public class show_restaurant_kakaoMap extends AppCompatActivity implements MapVi
         plistView = findViewById(R.id.pList);
         customAdapter = new ListViewAdapter();
         plistView.setAdapter(customAdapter);
+        slider = findViewById(R.id.slide_bar);
+        text_radius = findViewById(R.id.set_radius);
+        dialog = new ProgressDialog(this);
+        task = new Task();
+        check_index = 0;
+        slider.setEnabled(false);
+        slider.addOnSliderTouchListener(new Slider.OnSliderTouchListener() {
+            @Override
+            public void onStartTrackingTouch(@NonNull Slider slider) {
+                mapView.removeAllPOIItems();
+                customAdapter.clearItem();
+                listTouch = 0;
+                id=0;
+                pages=1;
+                final_cnt = 0;
+                cnt=0;
+                if(!selected){
+                    check_index = 0;
+                    keyword=food_list.get(check_index);
+                    encoding_url();
+                }
+            }
+            @Override
+            public void onStopTrackingTouch(@NonNull Slider slider) {
+                radius = Integer.valueOf((String) text_radius.getText().subSequence(0,4));
+                task = new Task();
+                api = "https://dapi.kakao.com/v2/local/search/keyword.xml?page="+pages+"&size=15&sort=distance&category_group_code=FD6&x="+mx_pos+"&y="+my_pos+"&query=" + encodeUrl + "&radius="+radius;
+                task.execute(api);
+
+            }
+
+        });
+        slider.addOnChangeListener(new Slider.OnChangeListener() {
+            @Override
+            public void onValueChange(@NonNull Slider slider, float value, boolean fromUser) {
+                text_radius.setText(String.valueOf((int)value)+"m");
+            }
+        });
 
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)!= PackageManager.PERMISSION_GRANTED){
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},1);
         }
 
         kakaoMap = show_restaurant_kakaoMap.this;
-        task = new Task();
+
 
         Intent get_data = getIntent();
+        selected = get_data.getBooleanExtra("selected",true);
         keyword = get_data.getStringExtra("Finish");
-        selected = get_data.getBooleanExtra("selected",false);
+        food_list = get_data.getStringArrayListExtra("check_food_list");
+
         /**
          p_distance = findViewById(R.id.distance);
          p_name = findViewById(R.id.place_name);
@@ -150,18 +205,17 @@ public class show_restaurant_kakaoMap extends AppCompatActivity implements MapVi
 
 
         //Log.i("마커", String.valueOf(mapView.isShowingCurrentLocationMarker()));
-        if(selected==false){
-                keyword=food_list[0];
-                encoding_url();
-                task = new Task();
+        if(!selected){
+            keyword=food_list.get(0);
+            encoding_url();
+            task = new Task();
         }
         else{
             keyword = get_data.getStringExtra("Finish");
             encoding_url();
         }
-        api = "https://dapi.kakao.com/v2/local/search/keyword.xml?page="+pages+"&size=15&sort=distance&category_group_code=FD6&x="+mx_pos+"&y="+my_pos+"&query=" + encodeUrl + "&radius=1000";
+        api = "https://dapi.kakao.com/v2/local/search/keyword.xml?page="+pages+"&size=15&sort=distance&category_group_code=FD6&x="+mx_pos+"&y="+my_pos+"&query=" + encodeUrl + "&radius="+radius;
         task.execute(api);
-
 
         //api = "https://dapi.kakao.com/v2/local/search/keyword.xml?page="+pages+"&size=15&sort=accuracy&category_group_code=FD6&query=" + encodeUrl;
 
@@ -182,18 +236,82 @@ public class show_restaurant_kakaoMap extends AppCompatActivity implements MapVi
             mapView.setMapCenterPoint(pMapPoint,true);
         });
 
+        plistView.setOnTouchListener((v, event) -> {
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    // 손을 터치했을 때
+                    isTouch = true;
+                    break;
+                case MotionEvent.ACTION_UP:
+                    // 손을 떼었을 때
+                    isTouch = false;
+                    break;
+            }
+            return false;
+        });
+
         plistView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+
+            private static final int PROGRESS_UPDATE_INTERVAL = 10;
+            private int newProgressValue = 0;
+            private ProgressBar progressBar;
+            private Handler handler = new Handler();
+            private Context myView;
+            private int get_position;
+            private Intent intent;
+
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(view.getContext(),show_info_restaurant.class);
-                intent.putExtra("url",xppList.getp_url[position]);
+                plistView.setSelection(position);
+                listTouch = position;
+                plistView.setSelector(new PaintDrawable(0xFFEA9F30));
+                MapPOIItem findMarker = mapView.findPOIItemByTag(position);
+                mapView.selectPOIItem(findMarker,false);
+                lat = findMarker.getMapPoint().getMapPointGeoCoord().latitude;
+                lng = findMarker.getMapPoint().getMapPointGeoCoord().longitude;
+                pMapPoint = MapPoint.mapPointWithGeoCoord(lat,lng);
+                mapView.setMapCenterPoint(pMapPoint,true);
+                progressBar = view.findViewById(R.id.prog);
+                newProgressValue = 10;
+                handler.post(updateProgressTask);
+                customAdapter.updateProgress(position,newProgressValue);
+
+
+                myView = view.getContext();
+                get_position = position;
+                intent = new Intent(myView,show_info_restaurant.class);
+                intent.putExtra("url",xppList.getp_url[get_position]);
                 intent.putExtra("mx_pos",mx_pos);
                 intent.putExtra("my_pos",my_pos);
-                intent.putExtra("lat",xppList.get_y[position]);
-                intent.putExtra("lng",xppList.get_x[position]);
-                startActivity(intent);
+                intent.putExtra("lat",xppList.get_y[get_position]);
+                intent.putExtra("lng",xppList.get_x[get_position]);
+
                 return true;
             }
+
+            private Runnable updateProgressTask = new Runnable() {
+                @Override
+                public void run() {
+                    if (isTouch) {
+                        if (newProgressValue < 100) {
+                            newProgressValue += 5;
+                            progressBar.setProgress(newProgressValue);
+                            handler.postDelayed(this, PROGRESS_UPDATE_INTERVAL);
+                        }
+                    } else {
+                        progressBar.setProgress(10);
+                        //handler.postDelayed(this, PROGRESS_UPDATE_INTERVAL);
+                    }
+                    if (newProgressValue == 10) {
+                        progressBar.setProgress(10);
+                        handler.removeCallbacks(this); // 게이지가 0이 되면 Runnable 중지
+                    } else if (newProgressValue >= 100) {
+                        handler.removeCallbacks(this);
+                        startActivity(intent);
+                        progressBar.setProgress(10);
+                    }
+                }
+            };
         });
     }
     public void encoding_url(){
@@ -347,7 +465,7 @@ public class show_restaurant_kakaoMap extends AppCompatActivity implements MapVi
     @Override
     public void onCurrentLocationUpdate(MapView mapView, MapPoint mapPoint, float v) {
         mapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOff);
-        mapView.setCurrentLocationRadius(1000);
+        mapView.setCurrentLocationRadius(radius);
         mapView.setCurrentLocationRadiusStrokeColor(Color.argb(100,0,0,0));
         mapView.setZoomLevel(4,true);
     }
@@ -375,8 +493,10 @@ public class show_restaurant_kakaoMap extends AppCompatActivity implements MapVi
 
         @Override
         protected String doInBackground(String... urls) {
+
             try{
                 String txt = downloadUrl(urls[0]);
+
                 //Log.i("txt: ",txt);
                 return txt;
 
@@ -390,11 +510,15 @@ public class show_restaurant_kakaoMap extends AppCompatActivity implements MapVi
             Log.i("완료", String.valueOf(task.getStatus()));
         }
 
+        @Override
+        protected void onPreExecute(){
+            slider.setEnabled(false);
+        }
 
         @Override
         protected void onPostExecute(String result){
-            try{
 
+            try{
                 XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
                 factory.setNamespaceAware(true);
                 XmlPullParser xpp = factory.newPullParser();
@@ -462,9 +586,11 @@ public class show_restaurant_kakaoMap extends AppCompatActivity implements MapVi
                             case "y":
                                 xpp.next();
                                 y = xpp.getText();
-                                xppList.get_y[cnt++] = y;
+                                xppList.get_y[cnt] = y;
+                                cnt++;
                                 break;
                         }
+
                     }
                     eventType = xpp.next();
 
@@ -491,7 +617,7 @@ public class show_restaurant_kakaoMap extends AppCompatActivity implements MapVi
             }
 
             //boolean is_end = Boolean.parseBoolean(xppList.get_end);
-            Boolean convert_isEnd = Boolean.parseBoolean(is_end);
+            convert_isEnd = Boolean.parseBoolean(is_end);
             //파싱이 완료 되었을때
             //xppList 클래스에 저장된 파싱 정보를 카카오맵 마커로 제작
 
@@ -524,7 +650,7 @@ public class show_restaurant_kakaoMap extends AppCompatActivity implements MapVi
             if(!convert_isEnd){
                 pages += 1;
                 task = new Task();
-                api = "https://dapi.kakao.com/v2/local/search/keyword.xml?page="+pages+"&size=15&sort=distance&category_group_code=FD6&x="+mx_pos+"&y="+my_pos+"&query=" + encodeUrl + "&radius=1000";
+                api = "https://dapi.kakao.com/v2/local/search/keyword.xml?page="+pages+"&size=15&sort=distance&category_group_code=FD6&x="+mx_pos+"&y="+my_pos+"&query=" + encodeUrl + "&radius="+radius;
                 //api = "https://dapi.kakao.com/v2/local/search/keyword.xml?page="+pages+"&size=15&sort=accuracy&category_group_code=FD6&query=" + encodeUrl;
                 task.execute(api);
 
@@ -533,19 +659,20 @@ public class show_restaurant_kakaoMap extends AppCompatActivity implements MapVi
                 Log.i("에이피",api);//api pages수 정상 상승 주소 검출
 
             }else if(convert_isEnd){
-                if(selected==false){
-                    if(check_index<food_list.length-1){
-                        check_index+=1;
-                        Log.i("횟수",String.valueOf(check_index));
-                        keyword=food_list[check_index];
-                        encoding_url();
+                if(!selected){
+                    check_index+=1;
+                    if(check_index < food_list.size()){
                         task = new Task();
-                        api = "https://dapi.kakao.com/v2/local/search/keyword.xml?page="+pages+"&size=15&sort=distance&category_group_code=FD6&x="+mx_pos+"&y="+my_pos+"&query=" + encodeUrl + "&radius=1000";
+                        //Log.i("횟수",String.valueOf(check_index));
+                        keyword=food_list.get(check_index);
+                        encoding_url();
+                        Log.i("뭔데",String.valueOf(food_list.size()));
+                        Log.i("횟수",String.valueOf(check_index));
+                        api = "https://dapi.kakao.com/v2/local/search/keyword.xml?page="+pages+"&size=15&sort=distance&category_group_code=FD6&x="+mx_pos+"&y="+my_pos+"&query=" + encodeUrl + "&radius="+radius;
                         task.execute(api);
-
                     }
                 }
-                for(int i = final_cnt;i<cnt;i++) {
+                for(int i = final_cnt ;i < cnt;i++) {
                     pMarker = new MapPOIItem();
                     double x = Double.parseDouble(xppList.get_x[i]);
                     double y = Double.parseDouble(xppList.get_y[i]);
@@ -554,7 +681,7 @@ public class show_restaurant_kakaoMap extends AppCompatActivity implements MapVi
                     pMarker.setTag(i);
                     System.out.println(xppList.get_Name[i]);
                     pMarker.setMapPoint(pMarkerPoint);
-                    if(selected==false){
+                    if(!selected){
                         if(food_type(xppList.get_foodType[i]).equals("한식")||
                                 food_type(xppList.get_foodType[i]).equals("중식")||
                                 food_type(xppList.get_foodType[i]).equals("양식")||
@@ -584,11 +711,13 @@ public class show_restaurant_kakaoMap extends AppCompatActivity implements MapVi
                     }
                     mapView.addPOIItem(pMarker);
                     customAdapter.addItem(xppList.get_Name[i],xppList.get_phone[i],xppList.get_dis[i]);
-                    customAdapter.notifyDataSetChanged();
-                    final_cnt=cnt;
+                    //customAdapter.notifyDataSetChanged();
                 }
+                final_cnt=cnt;
                 customAdapter.notifyDataSetChanged();
-                Log.i("몇개", String.valueOf(final_cnt));
+                Log.i("몇개", String.valueOf(customAdapter.getCount()));
+                slider.setEnabled(true);
+                mapView.setCurrentLocationRadius(radius);
                 //파싱이 끝났을 때 마지막 마커로 이동 및 정보 출력
 
                 if(cnt > 0){
@@ -608,10 +737,7 @@ public class show_restaurant_kakaoMap extends AppCompatActivity implements MapVi
                     Toast.makeText(getApplicationContext(),"선택된 음식의 가게가 주변에\n없어 처음 화면으로 돌아갈게요",Toast.LENGTH_LONG).show();
                     kakaoMap.finish();
                 }
-
-
             }
-
         }
 
         private String downloadUrl(String api) throws IOException{
@@ -664,30 +790,4 @@ public class show_restaurant_kakaoMap extends AppCompatActivity implements MapVi
         }
         return koreanFood;
     }
-
-
-
-    public void installedKakaoMap(View v)
-    {
-        Intent intent = getPackageManager().getLaunchIntentForPackage(PACKAGE_NAME);
-        String my_pos = String.valueOf(this.my_pos);
-        String mx_pos = String.valueOf(this.mx_pos);
-        Uri uri = Uri.parse("kakaomap://route?sp="+my_pos+","+mx_pos+"&ep="+lat+","+lng+"&by=FOOT");
-        Uri uri2 = Uri.parse("market://launch?id=net.daum.android.map");
-        if(intent == null){
-            Toast.makeText(getApplicationContext(),"카카오 맵을 설치해주세요.",Toast.LENGTH_LONG).show();
-            Intent it = new Intent(Intent.ACTION_VIEW,uri2);
-            startActivity(it);
-        }
-        else
-        {
-            Intent it = new Intent(Intent.ACTION_VIEW,uri);
-            startActivity(it);
-        }
-    }
-    public void place_info(View v){
-        Intent it = new Intent (Intent.ACTION_VIEW,Uri.parse(getUrl));
-        startActivity(it);
-    }
-
 }

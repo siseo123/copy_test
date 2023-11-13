@@ -7,6 +7,10 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
+    <queries>
+        <package android:name="net.daum.android.map" />
+    </queries>
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -19,6 +23,9 @@
         android:theme="@style/Theme.Whateat"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+        <activity
+            android:name=".presentation.question.FoodQuestionActivity"
+            android:exported="false" />
         <activity
             android:name=".MainActivity"
             android:exported="false" />
@@ -37,21 +44,19 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-
         <activity
-            android:name=".AddFoodMain"
+            android:name=".presentation.add_food.AddFoodListActivity"
             android:exported="false" />
         <activity
-            android:name=".ALLSelectMenu"
+            android:name=".presentation.selected_list.SelectedListActivity"
             android:exported="false" />
         <activity
-            android:name=".ChoiceMenuMain"
+            android:name=".presentation.choice.ChoiceFoodActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-
         <activity
             android:name=".SplashActivity"
             android:exported="true">
@@ -62,7 +67,14 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".rouletteMain"
+            android:name=".presentation.roulette.rouletteMain"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".presentation.roulette.RouletteActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
@@ -71,16 +83,9 @@
         <activity
             android:name=".show_info_restaurant"
             android:exported="false" />
-
-
         <activity
-            android:name=".presentation.CalendarActivity"
-            android:exported="false" />
-        <activity
-            android:name=".presentation.FoodListActivity"
+            android:name=".presentation.calendar.CalendarActivity"
             android:exported="false" />
     </application>
-    <queries>
-        <package android:name="net.daum.android.map"/>
-    </queries>
+
 </manifest>

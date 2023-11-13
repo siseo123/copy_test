@@ -1,19 +1,10 @@
-package com.food1.whateat;
-
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
+package com.food1.whateat.presentation.roulette;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
-import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.media.AudioManager;
 import android.media.SoundPool;
@@ -26,15 +17,17 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bluehomestudio.luckywheel.LuckyWheel;
-import com.bluehomestudio.luckywheel.OnLuckyWheelReachTheTarget;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.bluehomestudio.luckywheel.WheelItem;
+import com.food1.whateat.MainActivity;
+import com.food1.whateat.R;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class rouletteMain extends AppCompatActivity {
+public class RouletteActivity extends AppCompatActivity {
     private SensorManager sm;
     //private Sensor mAccelerometer;
     TextView randomTextView;
@@ -47,7 +40,7 @@ public class rouletteMain extends AppCompatActivity {
     ArrayList <String> allMenu2=new ArrayList<>();//모든 음식 배열
     private boolean isStopped = true;
     Dialog dilaog0;
-
+    ImageButton start;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,11 +48,11 @@ public class rouletteMain extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_roulette_main);
         soundPool = new SoundPool(1,AudioManager.STREAM_MUSIC,0);
-        soundPlay=soundPool.load(this,R.raw.wheel_wheel,0);
+        soundPlay=soundPool.load(this, R.raw.wheel_wheel,0);
         sm = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 
 
-        ImageButton start = findViewById(R.id.spin_btn);
+        start = findViewById(R.id.spin_btn);
         ImageButton Finish = findViewById(R.id.Ifinish);
         randomTextView = findViewById(R.id.select_food_text);
 
@@ -67,13 +60,13 @@ public class rouletteMain extends AppCompatActivity {
        // mAccelerometer = sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 
 
-        dilaog0 = new Dialog(rouletteMain.this);       // Dialog 초기화
+        dilaog0 = new Dialog(RouletteActivity.this);       // Dialog 초기화
         dilaog0.requestWindowFeature(Window.FEATURE_NO_TITLE); // 타이틀 제거
         dilaog0.setContentView(R.layout.dialog02);
 
 
         Intent it = getIntent();
-        allMenu2=it.getStringArrayListExtra("AllMenuList");//최종 음식들의 배열을 allMenu2에 저장
+        allMenu2 = it.getStringArrayListExtra("selectedFoodList");
 
 
 
@@ -87,7 +80,7 @@ public class rouletteMain extends AppCompatActivity {
                 if (!isStopped) {
                     int randomIndex = new Random().nextInt(allMenu2.size());
                     String randomMenu = allMenu2.get(randomIndex);
-
+                    start.setBackgroundResource(R.drawable.action_btn);
                     // UI 갱신은 메인 스레드에서 수행되어야 함
                     runOnUiThread(new Runnable() {
                         @Override
@@ -127,7 +120,7 @@ public class rouletteMain extends AppCompatActivity {
                         public void onClick(View view) {
 
                             if(allMenu2.size()==1)
-                                showToast(rouletteMain.this,"더이상 지울수 없습니다.");
+                                showToast(RouletteActivity.this,"더이상 지울수 없습니다.");
 
                             else if (allMenu2.contains(currentItem)) //아이템이 존재한다면
                             {
@@ -179,7 +172,7 @@ public class rouletteMain extends AppCompatActivity {
         if(money==null)
         {
 
-            showToast(rouletteMain.this,"메뉴를 결정하세요");
+            showToast(RouletteActivity.this,"메뉴를 결정하세요");
         }
 
 

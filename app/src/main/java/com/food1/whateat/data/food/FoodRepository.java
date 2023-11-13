@@ -8,8 +8,8 @@ import java.util.Map;
 
 public class FoodRepository {
 
-    private final Map<String, Food> foodMap = new HashMap<>();
-    private final Map<Category, List<Food>> categoryFoodMap = new HashMap<>();
+    private final Map<String, FoodVO> foodMap = new HashMap<>();
+    private final Map<Category, List<FoodVO>> categoryFoodMap = new HashMap<>();
 
 //    public void addFood(Food food) {
 //        foodMap.put(food.getName(), food);

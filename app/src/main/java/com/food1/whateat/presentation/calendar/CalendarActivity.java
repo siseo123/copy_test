@@ -1,4 +1,4 @@
-package com.food1.whateat.presentation;
+package com.food1.whateat.presentation.calendar;
 
 import android.os.Build;
 import android.os.Bundle;
@@ -13,7 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.food1.whateat.R;
 import com.food1.whateat.data.calendar.FoodCalendar;
-import com.food1.whateat.db.FoodCalendarDAO;
+import com.food1.whateat.data.calendar.FoodCalendarDAO;
 import com.food1.whateat.db.FoodDatabase;
 
 import java.util.ArrayList;

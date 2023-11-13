@@ -12,13 +12,10 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import android.Manifest;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.location.Address;
-import android.location.Geocoder;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -31,23 +28,26 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 
-import com.food1.whateat.presentation.CalendarActivity;
-import com.food1.whateat.presentation.FoodListActivity;
+import com.food1.whateat.data.food.FoodDAO;
+import com.food1.whateat.data.food.FoodVO;
+import com.food1.whateat.db.FoodDatabase;
+import com.food1.whateat.presentation.calendar.CalendarActivity;
+import com.food1.whateat.presentation.add_food.AddFoodListActivity;
+import com.food1.whateat.presentation.choice.ChoiceFoodActivity;
+import com.food1.whateat.presentation.question.FoodQuestionActivity;
+import com.food1.whateat.presentation.roulette.RouletteActivity;
+import com.food1.whateat.presentation.selected_list.SelectedListActivity;
 import com.google.android.material.navigation.NavigationView;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
+import java.util.stream.Collectors;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 public class MainActivity extends AppCompatActivity{
 
@@ -56,61 +56,49 @@ public class MainActivity extends AppCompatActivity{
     private static final int PERMISSIONS_REQUEST_CODE = 1;
     String[] REQUIRED_PERMISSIONS  = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
     private static final int REQUEST_CODE =100 ;
+
+    TextView Result;//결정된 음식명
+    CheckBox cbKo, cbCh, chJa, chWe, chFe, chAs;
+    private GpsTracker gpsTracker;
+    //따로 추가
+    String send_data;
+    Dialog dilaog01;
+    Dialog question_to_goto_food_dilago;
+    private DrawerLayout drawerLayout;
+    private NavigationView navigationView;
+    private Toolbar toolbar;
+    boolean check_result = true;
+    private FoodDatabase foodDatabase;
+    ArrayList<String> check_food = new ArrayList<>();
+
     String KF[];
     String CF[];
     String JF[];
     String WF[];
     String FF[];
     String AF[]; //위 6개는 각 해당하는 나라의 음식 배열임.
-    String ADDF[];
-    String AllMenuList[][];//위 6배열을 합칠 2차원 배열
 
-    TextView Result;//결정된 음식명
-    CheckBox ko;
-    CheckBox ch;
-    CheckBox ja;
-    CheckBox we;
-    CheckBox fe;
-    CheckBox as;
-    private GpsTracker gpsTracker;
-    //따로 추가
-    String send_data;
-    Dialog dilaog01;
-    Dialog  question_to_goto_food_dilago;
-
-    private DrawerLayout drawerLayout;
-    private NavigationView navigationView;
-    private Toolbar toolbar;
-
-
-    boolean check_result = true;
     @Override
     protected void onCreate(Bundle savedInstanceState) { 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         checkPermission();
-        KF=getResources().getStringArray(R.array.koreaF);
-        CF=getResources().getStringArray(R.array.chinaF);
-        JF=getResources().getStringArray(R.array.japanF);
-        WF=getResources().getStringArray(R.array.westF);
-        FF=getResources().getStringArray(R.array.fastF);
-        AF=getResources().getStringArray(R.array.asiaF);
-        ADDF=new String[100];
+        cbKo=findViewById(R.id.koreaFBT);
+        cbCh=findViewById(R.id.chinaFBT);
+        chJa=findViewById(R.id.japanFBT);
+        chWe=findViewById(R.id.westFBT);
+        chFe=findViewById(R.id.fastFBT);
+        chAs=findViewById(R.id.asiaFBT);
 
-        ko=findViewById(R.id.koreaFBT);
-        ch=findViewById(R.id.chinaFBT);
-        ja=findViewById(R.id.japanFBT);
-        we=findViewById(R.id.westFBT);
-        fe=findViewById(R.id.fastFBT);
-        as=findViewById(R.id.asiaFBT);
+        cbKo.setOnClickListener(CBCL);
+        cbCh.setOnClickListener(CBCL);
+        chJa.setOnClickListener(CBCL);
+        chWe.setOnClickListener(CBCL);
+        chFe.setOnClickListener(CBCL);
+        chAs.setOnClickListener(CBCL);
+        Result = findViewById(R.id.result);
 
-        ko.setOnClickListener(CBCL);
-        ch.setOnClickListener(CBCL);
-        ja.setOnClickListener(CBCL);
-        we.setOnClickListener(CBCL);
-        fe.setOnClickListener(CBCL);
-        as.setOnClickListener(CBCL);
-        Result=(TextView)findViewById(R.id.result);
+        foodDatabase = FoodDatabase.getInstance(this);
 
 
         dilaog01 = new Dialog(MainActivity.this);       // Dialog 초기화
@@ -169,8 +157,8 @@ public class MainActivity extends AppCompatActivity{
                         new Handler().postDelayed(new Runnable() {
                             @Override
                             public void run() {
-                                Intent intent2 = new Intent(getApplicationContext(), FoodListActivity.class);
-                                startActivity(intent2);
+                                Intent intent = new Intent(MainActivity.this, FoodQuestionActivity.class);
+                                startActivity(intent);
                             }
                         }, 250); //버벅여서 지연시간 추가
                         break;
@@ -210,54 +198,72 @@ public class MainActivity extends AppCompatActivity{
 
     }
 
-    public void on_Click(View v) //해당 하는 이미지를 클릭하면 작동되는 함수. 해당 하는 음식의 num을 받은 후 리퀘스트 코드에 num을 더해  ChoiceMenuMain 로전달
+    public void on_Click(View v)
     {
-        int id = v.getId();
-        ImageView images = findViewById(id);
-        String tag = (String)images.getTag();
+
         int MenuNum;
 
-
-        Intent intent = new Intent(this, ChoiceMenuMain.class);
-
+        Intent intent = new Intent(this, ChoiceFoodActivity.class);
+        String tag = (String)v.getTag();
         switch (tag)
         {
             case "koreaF":MenuNum=1;
-                intent.putExtra("arr",KF);
-                  break;
-
+                intent.putExtra("category", "한식");
+                break;
             case "chinaF":MenuNum=2;
-                intent.putExtra("arr",CF);
+                intent.putExtra("category", "중식");
                 break;
-
             case "japanF":MenuNum=3;
-                intent.putExtra("arr",JF);
+                intent.putExtra("category", "일식");
                 break;
-
             case "westF":MenuNum=4;
-                intent.putExtra("arr",WF);
+                intent.putExtra("category", "양식");
                 break;
-
             case "fastF":MenuNum=5;
-                intent.putExtra("arr",FF);
+                intent.putExtra("category", "패스트푸드");
                 break;
-
             case "asiaF":MenuNum=6;
-                intent.putExtra("arr",AF);
+                intent.putExtra("category", "아시안");
                 break;
-
-
             default: MenuNum = 0;
                 break;
-
         }
+        startActivityForResult(intent,REQUEST_CODE + MenuNum);
+    }
 
-
-
-        intent.putExtra("it_tag",tag);
-
-        startActivityForResult(intent,REQUEST_CODE+MenuNum);
-
+    public int selectFood(Intent data) {
+        int nonNullCount = 0;
+        if (data == null) {
+            return 0;
+        }
+        FoodDAO foodDAO = foodDatabase.foodDAO();
+        String[] selecteds = data.getStringArrayExtra("selected");
+        if (selecteds == null) {
+            return 0;
+        }
+        for (String item : selecteds) {
+            String selected = item.substring(0,1);
+            String foodName = item.substring(2);
+            if (selected.equals("T")) {
+                FoodVO foodVO = foodDAO.findByFoodName(foodName);
+                if (foodVO == null) {
+                    FoodVO addFoodVO = new FoodVO(foodName);
+                    addFoodVO.setSelected(true);
+                    foodDAO.insert(addFoodVO);
+                } else {
+                    foodVO.setSelected(true);
+                    foodDAO.update(foodVO);
+                }
+                nonNullCount++;
+            } else {
+                FoodVO foodVO = foodDAO.findByFoodName(foodName);
+                if (foodVO != null) {
+                    foodVO.setSelected(false);
+                    foodDAO.update(foodVO);
+                }
+            }
+        }
+        return nonNullCount;
     }
 
     //다른 엑티비티에서 메인으로 돌아올 떄
@@ -284,326 +290,62 @@ public class MainActivity extends AppCompatActivity{
 
 
 
-      //밑은  ChoiceMenuMain 로 부터 받은 리퀘스트 코드임.
-
-
         if(requestCode == 101){
-            int nonNullCount = 0;
-            if(data != null){
-
-
-
-                KF = data.getStringArrayExtra("CheckBox");//한국음식 배열을  ChoiceMenuMain 으로 부터 받은 배열로 초기화
-                for (String item : KF) {
-                    if (item != null) {
-                        nonNullCount++;
-                    }
-                }
-
-                if(KF != null){
-                    showToast(this, "한식 결정!");
-
-
-
-                }
+            if(selectFood(data)<1) {
+                cbKo.setChecked(false);
+            }
+            else {
+                showToast(this, "한식 결정!");
+                cbKo.setChecked(true);
             }
 
-
-            if(nonNullCount<1)
-                ko.setChecked(false);
-            else
-                ko.setChecked(true);
-
-
-
-
-        }//101은 한국음식
-
+        }
         else if(requestCode == 102){
-
-
-            int nonNullCount = 0;
-            if(data != null){
-
-
-                CF = data.getStringArrayExtra("CheckBox");
-
-                for (String item : CF) {
-                    if (item != null) {
-                        nonNullCount++;
-                    }
-                }
-
-                if(CF != null){
-                    showToast(this, "중식 결정!");
-
-
-
-
-                }
+            if(selectFood(data)<1) {
+                cbCh.setChecked(false);
             }
-
-            if(nonNullCount<1)
-                ch.setChecked(false);
-            else
-                ch.setChecked(true);
-
-
-
+            else {
+                showToast(this, "중식 결정!");
+                cbCh.setChecked(true);
+            }
         }
-
-
         else if(requestCode == 103){
-            int nonNullCount = 0;
-            if(data != null){
-
-
-                JF = data.getStringArrayExtra("CheckBox");
-
-                for (String item : JF) {
-                    if (item != null) {
-                        nonNullCount++;
-                    }
-                }
-
-
-                if(JF != null) {
-                    showToast(this, "일식 결정!");
-
-                }
-
-
-
-
+            if(selectFood(data)<1) {
+                chJa.setChecked(false);
             }
-
-            if(nonNullCount<1)
-                ja.setChecked(false);
-            else
-                ja.setChecked(true);
-
-
+            else {
+                showToast(this, "일식 결정!");
+                chJa.setChecked(true);
+            }
         }
-
-
         else if(requestCode == 104){
-            int nonNullCount = 0;
-            if(data != null){
-
-
-                WF = data.getStringArrayExtra("CheckBox");
-
-                for (String item : WF) {
-                    if (item != null) {
-                        nonNullCount++;
-                    }
-                }
-
-                if(WF != null){
-                    showToast(this, "양식 결정!");
-                }
-
-
-
-
-
+            if(selectFood(data)<1) {
+                chWe.setChecked(false);
             }
-
-            if(nonNullCount<1)
-                we.setChecked(false);
-            else
-                we.setChecked(true);
-
-
+            else {
+                showToast(this, "양식 결정!");
+                chWe.setChecked(true);
+            }
         }
 
         else if(requestCode == 105){
-            int nonNullCount = 0;
-            if(data != null){
-
-
-                FF = data.getStringArrayExtra("CheckBox");
-
-
-
-                for (String item : FF) {
-                    if (item != null) {
-                        nonNullCount++;
-                    }
-                }
-
-                if(FF != null){
-                    showToast(this, "패스트푸드 결정!");
-                }
+            if(selectFood(data)<1) {
+                chFe.setChecked(false);
             }
-
-
-            if(nonNullCount<1)
-                fe.setChecked(false);
-            else
-                fe.setChecked(true);
-
+            else {
+                showToast(this, "패스트푸드 결정!");
+                chFe.setChecked(true);
+            }
         }
-
-
         else if(requestCode == 106){
-            int nonNullCount = 0;
-            if(data != null){
-
-
-                AF = data.getStringArrayExtra("CheckBox");
-
-                for (String item : AF) {
-                    if (item != null) {
-                        nonNullCount++;
-                    }
-                }
-
-                if(AF != null){
-                    showToast(this, "아시안 결정!");
-                }
-
+            if(selectFood(data)<1) {
+                chAs.setChecked(false);
             }
-
-
-
-            if(nonNullCount<1)
-                as.setChecked(false);
-            else
-                as.setChecked(true);
-
-
+            else {
+                showToast(this, "아시안 결정!");
+                chAs.setChecked(true);
+            }
         }
-
-        //개별적으로 추가한 음식
-        else if(requestCode == 107){
-            if(data != null)
-                ADDF = data.getStringArrayExtra("CheckBox");
-        }
-
-
-
-
-
-        //선택목록에서
-        else if(requestCode == 108){
-            {
-                int nonNullCount = 0;
-                if(data != null)
-                {
-                    KF = data.getStringArrayExtra("K");//한국음식 배열을  ChoiceMenuMain 으로 부터 받은 배열로 초기화
-                    for (String item : KF)
-                        if (item != null)
-                            nonNullCount++;
-                }
-                if(nonNullCount<1)
-                    ko.setChecked(false);
-                else
-                    ko.setChecked(true);
-            }
-
-
-            {
-                int nonNullCount = 0;
-                if(data != null)
-                {
-                    CF = data.getStringArrayExtra("C");//한국음식 배열을  ChoiceMenuMain 으로 부터 받은 배열로 초기화
-                    for (String item : CF)
-                        if (item != null)
-                            nonNullCount++;
-                }
-                if(nonNullCount<1)
-                    ch.setChecked(false);
-                else
-                    ch.setChecked(true);
-            }
-
-
-            {
-                int nonNullCount = 0;
-                if(data != null)
-                {
-                    JF = data.getStringArrayExtra("J");//한국음식 배열을  ChoiceMenuMain 으로 부터 받은 배열로 초기화
-                    for (String item : JF)
-                        if (item != null)
-                            nonNullCount++;
-                }
-                if(nonNullCount<1)
-                    ja.setChecked(false);
-                else
-                    ja.setChecked(true);
-            }
-
-
-            {
-                int nonNullCount = 0;
-                if(data != null)
-                {
-                    WF = data.getStringArrayExtra("W");//한국음식 배열을  ChoiceMenuMain 으로 부터 받은 배열로 초기화
-                    for (String item : WF)
-                        if (item != null)
-                            nonNullCount++;
-                }
-                if(nonNullCount<1)
-                    we.setChecked(false);
-                else
-                    we.setChecked(true);
-            }
-
-
-            {
-                int nonNullCount = 0;
-                if(data != null)
-                {
-                    FF = data.getStringArrayExtra("F");//한국음식 배열을  ChoiceMenuMain 으로 부터 받은 배열로 초기화
-                    for (String item : FF)
-                        if (item != null)
-                            nonNullCount++;
-                }
-                if(nonNullCount<1)
-                    fe.setChecked(false);
-                else
-                    fe.setChecked(true);
-            }
-
-
-
-            {
-                int nonNullCount = 0;
-                if(data != null)
-                {
-                    AF = data.getStringArrayExtra("A");//한국음식 배열을  ChoiceMenuMain 으로 부터 받은 배열로 초기화
-                    for (String item : AF)
-                        if (item != null)
-                            nonNullCount++;
-                }
-                if(nonNullCount<1)
-                    as.setChecked(false);
-                else
-                    as.setChecked(true);
-            }
-
-
-            ADDF = data.getStringArrayExtra("AD");
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        }
-
 
         //룰렛에서 돌아올때 실행
         else if(requestCode==10000)
@@ -668,7 +410,6 @@ public class MainActivity extends AppCompatActivity{
 
 
 
-    //체크 온 오프 할때 실행되는 곳
     View.OnClickListener CBCL = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -681,10 +422,12 @@ public class MainActivity extends AppCompatActivity{
                     if(checked)//한국 음식의 체크박스가 체크되어있다면 한국음식 배열을 기존에 있는 모든 한국음식 리스트로 채움
                     {
                         KF=getResources().getStringArray(R.array.koreaF);
+                        check_food.add("한식");
 
                     }
                     else  //아니라면 전부 널로 채움
                     {
+                        check_food.remove("한식");
                         Arrays.fill(KF, null);
                     }
                     break;
@@ -695,10 +438,11 @@ public class MainActivity extends AppCompatActivity{
                     {
 
                         CF=getResources().getStringArray(R.array.chinaF);
-
+                        check_food.add("중식");
                     }
                     else
                     {
+                        check_food.remove("중식");
                         Arrays.fill(CF, null);
 
                     }
@@ -708,12 +452,13 @@ public class MainActivity extends AppCompatActivity{
 
                     if(checked)
                     {
-
+                        check_food.add("일식");
                         JF=getResources().getStringArray(R.array.japanF);
 
                     }
                     else
                     {
+                        check_food.remove("일식");
                         Arrays.fill(JF, null);
 
                     }
@@ -723,12 +468,13 @@ public class MainActivity extends AppCompatActivity{
 
                     if(checked)
                     {
-
+                        check_food.add("양식");
                         WF=getResources().getStringArray(R.array.westF);
 
                     }
                     else
                     {
+                        check_food.remove("양식");
                         Arrays.fill(WF, null);
 
                     }
@@ -738,12 +484,13 @@ public class MainActivity extends AppCompatActivity{
 
                     if(checked)
                     {
-
+                        check_food.add("패스트푸드");
                         FF=getResources().getStringArray(R.array.fastF);
 
                     }
                     else
                     {
+                        check_food.remove("패스트푸드");
                         Arrays.fill(FF, null);
 
                     }
@@ -753,11 +500,12 @@ public class MainActivity extends AppCompatActivity{
 
                     if(checked)
                     {
-
+                        check_food.add("아시아음식");
                         AF=getResources().getStringArray(R.array.asiaF);
                     }
                     else
                     {
+                        check_food.remove("아시아음식");
                         Arrays.fill(AF, null);
 
                     }
@@ -772,8 +520,10 @@ public class MainActivity extends AppCompatActivity{
         }
     };
 
-
-
+    public void clickAddFoodActivity(View view) {
+        Intent intent = new Intent(getApplicationContext(), AddFoodListActivity.class);
+        startActivity(intent);
+    }
 
     //안봐도됨
     @Override
@@ -914,74 +664,30 @@ public class MainActivity extends AppCompatActivity{
 
     //룰렛이었던 페이지로 가는 함수
     public void goto_Roulette(View v){
-        Intent rouletteIntent = new Intent(this, rouletteMain.class);
-        ArrayList<String> allMenu1= new ArrayList<String>();
-        AllMenuList=new String[][]{KF,CF,JF,WF,FF,AF,ADDF};
+        Intent rouletteIntent = new Intent(this, RouletteActivity.class);
 
-       for (int x=0;x<7;x++)//위 7카테고리의 음식종류 만큼 반복    모든 음식배열들을 하나로 모으는 과정
-       try {
-
-              for (int y=0;y<30;y++)//일단은 30개로 고정 AllMenuList[x].length; 로 수정 가능
-              {
-
-                  if (AllMenuList[x][y] != null)
-                      allMenu1.add(AllMenuList[x][y]); //해당 음식을 allMenu1 배열에 추가
-
-              }
-
-           }
-        //예외처리
-       catch(Exception e) {
-
-           e.printStackTrace();
-
-           continue;
-       }
-        //혹시 모르는 allMenu1의 null제거
-       while (allMenu1.remove(null));
-
-       //만약 음식의 갯수가 2개미만이라면 룰렛을 돌릴 이유가 없음.
-        if(allMenu1.size()<2)
-            Toast.makeText(this, "음식을 두개이상 고르셔야 룰렛이 작동합니다. (현재 갯수) "+allMenu1.size()+"개", Toast.LENGTH_LONG).show();
-
-        //아니라면 allMenu1배열을 룰렛으로 보냄
-        else{
-        rouletteIntent.putStringArrayListExtra("AllMenuList", allMenu1);
-        startActivityForResult(rouletteIntent,10000);}
+        FoodDAO foodDAO = foodDatabase.foodDAO();
+        List<FoodVO> foodsBySelected = foodDAO.findFoodsBySelected();
+        if (foodsBySelected.size() < 2)
+            Toast.makeText(this, "음식을 두개이상 고르셔야 룰렛이 작동합니다. (현재 갯수) "
+                    + foodsBySelected.size() + "개", Toast.LENGTH_LONG).show();
+        else {
+            List<String> foodList = foodsBySelected.stream()
+                    .map(foodVO -> foodVO.getName())
+                    .collect(Collectors.toList());
+            rouletteIntent.putStringArrayListExtra("selectedFoodList", new ArrayList<>(foodList));
+            startActivityForResult(rouletteIntent, 10000);
+        }
     }
-
-
-
-    //음식 추가페이지로 이동하는 함수. 전에 추가한 음식이 있는 ADDF배열을 같이 보냄.(빼고 싶을수도 있으니깐)
-    public void goto_AddFood(View v)
-    {
-        Intent addfood=new Intent(this,AddFoodMain.class);
-
-            addfood.putExtra("AddedMenu", ADDF);
-            setResult(RESULT_OK, addfood);
-        startActivityForResult(addfood,107);
-
-    }
-
 
 
     //전체 선택한 메뉴를 확인하러 가는 메서드
     public void goto_ALLSelectMenu(View v)
     {
-        Intent ASM=new Intent(this,ALLSelectMenu.class);
-        ArrayList<String> allMenu1= new ArrayList<String>();
-
-
-            ASM.putExtra("KF",KF);
-            ASM.putExtra("CF",CF);
-            ASM.putExtra("JF",JF);
-            ASM.putExtra("WF",WF);
-            ASM.putExtra("FF",FF);
-            ASM.putExtra("AF",AF);
-            ASM.putExtra("ADF",ADDF);
-
-            setResult(RESULT_OK, ASM);
-            startActivityForResult(ASM,108);
+        Intent ASM=new Intent(this, SelectedListActivity.class);
+        ArrayList<String> allMenu1 = new ArrayList<String>();
+        setResult(RESULT_OK, ASM);
+        startActivityForResult(ASM,108);
 
     }
 
@@ -1004,14 +710,6 @@ public class MainActivity extends AppCompatActivity{
     }
 
 
-
-
-
-
-
-
-
-
     public void goto_map(View v)
     {
 
@@ -1023,10 +721,10 @@ public class MainActivity extends AppCompatActivity{
         }
 
 
-       else if (!check_result) {
+        else if (!check_result) {
             // 만얀 권한이 거부가 된다면 2가지 경우로 설명해줌.
 
-                Toast.makeText(MainActivity.this, "위치 접근 권한이 없습니다.\n설정(앱 정보)에서 확인해주세요.", Toast.LENGTH_LONG).show();
+            Toast.makeText(MainActivity.this, "위치 접근 권한이 없습니다.\n설정(앱 정보)에서 확인해주세요.", Toast.LENGTH_LONG).show();
 
         }
 
@@ -1034,8 +732,15 @@ public class MainActivity extends AppCompatActivity{
         //여기 수정 필요. 체크박스 켜져 있는 타입의 가게만 나오게끔.
         else if(send_data==null || "굶기".equals(send_data)||"".equals(send_data))
         {
-            Intent intent = new Intent(this, show_restaurant_kakaoMap.class);
-            startActivity(intent);
+            if(check_food.isEmpty()){
+                Toast.makeText(MainActivity.this, "카테고리 1개 이상 선택해주세요.", Toast.LENGTH_LONG).show();
+            }else{
+                Intent intent = new Intent(this, show_restaurant_kakaoMap.class);
+                intent.putExtra("selected",false);
+                intent.putExtra("check_food_list",check_food);
+                startActivity(intent);
+            }
+
             //showToast(this, "음식을 제대로 고른후 눌러주세요");
 
 

@@ -4,13 +4,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".rouletteMain"
+    tools:context=".presentation.roulette.rouletteMain"
     android:orientation="vertical"
     android:background="@color/background">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".rouletteMain"
+        tools:context=".presentation.roulette.rouletteMain"
         android:layout_gravity="center"
         android:background="@color/background"
         android:layout_weight="1">

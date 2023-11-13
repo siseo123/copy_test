@@ -1,4 +1,4 @@
-package com.food1.whateat.db;
+package com.food1.whateat.data.calendar;
 
 import androidx.room.Dao;
 import androidx.room.Insert;

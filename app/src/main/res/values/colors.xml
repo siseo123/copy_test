@@ -12,4 +12,6 @@
     <color name="text_color_gray">#FF6E6E6E</color>
     <color name="background">#FFFFFFFF</color>
     <color name="box">#FF000000</color>
+
+    <color name="gray_light">#BBBBBB</color>
 </resources>

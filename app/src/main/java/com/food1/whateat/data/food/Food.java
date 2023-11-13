@@ -1,84 +1,55 @@
 package com.food1.whateat.data.food;
 
-import androidx.room.ColumnInfo;
-import androidx.room.Entity;
-import androidx.room.PrimaryKey;
+import com.food1.whateat.data.category.Category;
 
-//TODO: name unique
-@Entity(tableName = "foods")
+import java.util.ArrayList;
+import java.util.List;
+
 public class Food {
-
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "food_id")
-    private int id;
-    @ColumnInfo(name = "name")
     private final String name;
-    private boolean like = false;
-    private boolean selected = false;
+    private List<Category> categories = new ArrayList<>();
 
     public Food(String name) {
         this.name = name;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public boolean isLike() {
-        return like;
-    }
-
-    public void setLike(boolean like) {
-        this.like = like;
-    }
-
-    public boolean isSelected() {
-        return selected;
-    }
-
-    public void setSelected(boolean selected) {
-        this.selected = selected;
     }
 
     public String getName() {
         return name;
     }
 
-//    public static Builder builder(String name) {
-//        return new Builder(name);
-//    }
-//
-//    public static Builder builder() {
-//        return new Builder();
-//    }
-//
-//    public static class Builder {
-//
-//
-//        private String name;
-//
-//        public Builder(String name) {
-//            this.name = name;
-//        }
-//
-//        public Builder() {
-//        }
-//
-//        public Builder category(Category category) {
-//            return this;
-//        }
-//
-//        public Food build() {
-//            Food food = new Food();
-//            return food;
-//        }
-//    }
-//
-//    public static enum DefaultFoods {
-//        //**//
-//    }
+    public void setCategories(List<Category> categories) {
+        this.categories = categories;
+    }
+
+    public List<Category> getCategories() {
+        return categories;
+    }
+
+    public static Builder builder(String name) {
+        return new Builder(name);
+    }
+
+    public static class Builder {
+
+
+        private String name;
+        private List<Category> categories = new ArrayList<>();
+        public Builder(String name) {
+            this.name = name;
+        }
+
+        public Builder() {
+        }
+
+        public Builder addCategory(Category category) {
+            categories.add(category);
+            return this;
+        }
+
+        public Food build() {
+            Food food = new Food(name);
+            food.setCategories(categories);
+            return food;
+        }
+    }
 }
