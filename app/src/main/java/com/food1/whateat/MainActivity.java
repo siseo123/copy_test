@@ -69,15 +69,13 @@ public class MainActivity extends AppCompatActivity{
     private Toolbar toolbar;
     boolean check_result = true;
     private FoodDatabase foodDatabase;
-    ArrayList<String> check_food = new ArrayList<>();
-
     String KF[];
     String CF[];
     String JF[];
     String WF[];
     String FF[];
     String AF[]; //위 6개는 각 해당하는 나라의 음식 배열임.
-
+    ArrayList<String> check_food = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) { 
         super.onCreate(savedInstanceState);
